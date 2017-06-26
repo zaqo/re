@@ -19,6 +19,7 @@
 	{
 		unset($user);
 	}
+	$val=$_SESSION['val'];
 	$userstr = '';
 	if (isset($_SESSION['user']))
 	{
@@ -39,6 +40,7 @@
 				<button onclick='myFunction()' class='dropbtn'>Меню</button>
 				<div id=\"myDropdown\" class=\"dropdown-content\">
 				<a href=\"select_tenant.php\">Выбор арендатора</a>
+				<a href=\"invoice_form.php?val=$val\">Создать счет</a>
 				<a href=\"logout.php\">Выйти из системы</a>
 				</div>
 			</div>

@@ -1,6 +1,9 @@
 <?php // login.php
 include_once 'header.php';
-include_once ("login_agents.php"); 
+include_once ("login_re.php"); 
+
+// SAMPLE. It's still not in use
+
 echo "<div class='main'>
 <h2>Введите свои учетные данные</h2>";
 
@@ -11,7 +14,7 @@ $db_server = mysqli_connect($db_hostname, $db_username,$db_password);
 				If (!$db_server) die("Can not connect to a database!!".mysqli_connect_error($db_server));
 				mysqli_select_db($db_server,$db_database)or die(mysqli_error($db_server));
 		
-				//Prepare list of agents
+				
 				
 	if (isset($_POST['user']))
 	{
