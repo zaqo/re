@@ -93,6 +93,7 @@ END;
 		echo <<<_END
 		<a href="select_tenant.php" > <img src="/re/src/arrow_left.png" alt="Go back" title="Back" width="64" height="64"></a>
 		<a href="invoice_form.php?val=$id" > <img src="/re/src/red-plus.png" alt="Create" title="Create invoice" width="64" height="64"></a>
+		<a href="show_ledger.php?val=$id" > <img src="/re/src/registry.jpg" alt="Реестр" title="Перечень счетов" width="64" height="64"></a>
 _END;
 				
 mysqli_close($db_server);

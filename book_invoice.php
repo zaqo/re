@@ -17,7 +17,7 @@ include ("login_re.php");
 				$cur=$Currencies[$currency];
 				$datetime = new DateTime();
 				$datestr = $datetime->format('d-m-Y');
-				var_dump($facevalue);
+				var_dump($invoices_block);
 	/*
 				var_dump($contractid);
 				var_dump($clientid);
@@ -64,54 +64,63 @@ include ("login_re.php");
 					else
 						echo "WARNING: revenue is empty! <br>";
 				// 3. Cancel the other invoices for this month
-					foreach($invoices_block as $key => $val)
+					if(isset($invoices_block))
 					{
+						foreach($invoices_block as $key => $val)
+						{
 						//1.Cleare the invoice
 						
-						$cancelinvoicesql="UPDATE invoice SET isValid=FALSE WHERE id=$val";
-						$answsql=mysqli_query($db_server,$cancelinvoicesql);
-						if(!$answsql) die("Database invoice update failed: ".mysqli_error($db_server));
+							$cancelinvoicesql="UPDATE invoice SET isValid=FALSE WHERE id=$val";
+							$answsql=mysqli_query($db_server,$cancelinvoicesql);
+							if(!$answsql) die("Database invoice update failed: ".mysqli_error($db_server));
 						//echo "Canceled invoice # $value \n";
 						
 						//2. Clear revenue
 						
-						$cancelinrevenuesql="UPDATE revenue SET isValid=FALSE WHERE invoice_id=$val";
-						$answsql=mysqli_query($db_server,$cancelinrevenuesql);
-						if(!$answsql) die("Database invoice update failed: ".mysqli_error($db_server));
+							$cancelinrevenuesql="UPDATE revenue SET isValid=FALSE WHERE invoice_id=$val";
+							$answsql=mysqli_query($db_server,$cancelinrevenuesql);
+							if(!$answsql) die("Database invoice update failed: ".mysqli_error($db_server));
 						
 						//3. Clear contract
 						
-						$locateinvoicesql="SELECT * FROM contract_ledger WHERE contract_id=$contractid AND doc_id=$val";
-						$answsql=mysqli_query($db_server,$locateinvoicesql);
+							$locateinvoicesql="SELECT * FROM contract_ledger WHERE contract_id=$contractid AND doc_id=$val";
+							$answsql=mysqli_query($db_server,$locateinvoicesql);
 						
-						if(!$answsql) die("Database SELECT failed: ".mysqli_error($db_server));
-						$num_ledger=mysqli_num_rows($answsql);
-						$checkResL=array();
-						if($num_ledger==0)
-							echo "ERROR: Not capable to find the Invoice in the contract ledger \n"; 
-						else
-						{
-							for($i=0;$i<$num_ledger;$i++)
+							if(!$answsql) die("Database SELECT failed: ".mysqli_error($db_server));
+							$num_ledger=mysqli_num_rows($answsql);
+							$checkResL=array();
+							if($num_ledger==0)
+								echo "ERROR: Not capable to find the Invoice in the contract ledger \n"; 
+							else
 							{
-								$checkResL=mysqli_fetch_row($answsql);
-							//var_dump($checkRes);// checking if we have found a contract
+								for($i=0;$i<$num_ledger;$i++)
+								{
+									$checkResL=mysqli_fetch_row($answsql);
+									//var_dump($checkRes);// checking if we have found a contract
 						
-								$cid=$checkResL[1];
-								$iid=$checkResL[2];
-								$idate=$checkResL[4];
-								$ival=-$checkResL[5];
-								$idec=$checkResL[6];
-								$imonth=$checkResL[7];
-								$iyear=$checkResL[8];
-								$resultnew=$checkResL[9]-$checkResL[5];
-								$cancelincontractsql='INSERT INTO contract_ledger 
+									$cid=$checkResL[1];
+									$iid=$checkResL[2];
+									$idate=$checkResL[4];
+									$ival=-$checkResL[5];
+									$idec=$checkResL[6];
+									$imonth=$checkResL[7];
+									$iyear=$checkResL[8];
+									//Get current standing
+									$checkresultsql="SELECT result FROM contract_ledger ORDER BY id DESC LIMIT 1";
+									$answsql=mysqli_query($db_server,$checkresultsql);
+									if(!$answsql) die("Contract Ledger SELECT failed: ".mysqli_error($db_server));
+									$LastRes=mysqli_fetch_row($answsql);
+									
+									$resultnew=$LastRes[0]-$checkResL[5];
+									$cancelincontractsql='INSERT INTO contract_ledger 
 										(contract_id,doc_id,doc_type,date,value,decade,month,year,result) 
 										VALUES
 										("'.$cid.'","'.$iid.'",1,"'.$idate.'","'.$ival.'",
 										"'.$idec.'","'.$imonth.'","'.$iyear.'","'.$resultnew.'")';
-								$answsql=mysqli_query($db_server,$cancelincontractsql);
-								if(!$answsql) die("Contract ledger STORNO invoice failed: ".mysqli_error($db_server));
-							}	
+									$answsql=mysqli_query($db_server,$cancelincontractsql);
+									if(!$answsql) die("Contract ledger STORNO invoice failed: ".mysqli_error($db_server));
+								}	
+							}
 						}
 					}
 				// 4. Book in the contract ledger
@@ -148,7 +157,7 @@ include ("login_re.php");
 					
 					mysqli_close($db_server);
 				}
-				//echo '<script>history.go(-3);</script>';
+				echo '<script>history.go(-3);</script>';
 		?>
 		
 		

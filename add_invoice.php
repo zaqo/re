@@ -52,11 +52,10 @@ include ("login_re.php");
 				
 				$answsql=mysqli_query($db_server,$bookingsql);
 				$num=mysqli_num_rows($answsql);
-				
+				$input_string="";
 				if($num)
 				{	
 				   //echo "По данному контракту найдены сл. счета($num - шт.) \n";
-				   $input_string="";
 				   for($i=0;$i<$num;$i++)
 				   {
 						$invData[$i]= mysqli_fetch_row($answsql);
@@ -72,7 +71,7 @@ include ("login_re.php");
 					//var_dump($invData[$i]);
 				   }
 				}
-				
+				else $input_string="<input hidden type=\"text\" name=\"invoice[0]\" class=\"value\" value=\"NULL\">";
 				// 3. Prepare the invoice
 				
 				if($type==1)
