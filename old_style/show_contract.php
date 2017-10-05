@@ -3,7 +3,16 @@ include ("login_re.php");
 include_once("header.php"); 
    //set_time_limit(0);
 
-
+echo <<<END
+		<html>
+		
+		<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<link rel="stylesheet" type="text/css" href="/Agents/css/style.css" />
+		<title>Карточка Договора</title>
+	</head>
+	<body>
+END;
 	$id= $_REQUEST['val'];
 	
 		$db_server = mysqli_connect($db_hostname, $db_username,$db_password);
@@ -26,9 +35,9 @@ include_once("header.php");
 					
 				if ($cData[11]) $status="checked";
 				if (!$cData[7]) $frame="-";
-				$content='';
-				$content.="
-						<table class=\"fullTab\">
+				
+				echo "
+						<table>
 							<tr><th colspan='2' ><p>Контракт:</p></th></tr>
 							<tr><td ><p>Номер: </p></td><td>$cData[2]</td></tr>
 							<tr><td ><p>Дата: </p></td><td>$cdate_reg_show</td></tr>
@@ -51,11 +60,11 @@ include_once("header.php");
 			if(!$answsql) die("Database SELECT failed: ".mysqli_error($db_server));	
 			$rows = $answsql->num_rows;
 
-			$content.="<br><hr><br><div class='colortext'> СЧЕТА ПО КОНТРАКТУ:</div>";
+			echo  "<br><hr><br><div class='colortext'> СЧЕТА ПО КОНТРАКТУ:</div>";
 				
-			$content.="<br><table class=\"myTab\">";
-			$content.="<tr><th class=\"col1\">№</th><th class=\"col2\">FI</th><th class=\"col3\">Дата</th><th class=\"col4\">Декада</th><th class=\"col5\">Месяц</th>
-				<th class=\"col6\">Год</th><th class=\"col7\">Сумма</th><th class=\"col8\">НДС</th><th class=\"col9\">Валюта</th><th class=\"col10\">Удалить</th></tr>";
+			echo "<br><table>";
+			echo "<tr><th>№</th><th>FI</th><th>Дата</th><th>Декада</th><th>Месяц</th>
+				<th>Год</th><th>Сумма</th><th>НДС</th><th>Валюта</th><th>Удалить</th></tr>";
 			//$red="<img src='/Agents/src/redcircle.png' alt='Penalty'  width='32' height='32'>";
 			//$green="<img src='/Agents/src/greencircle.png' alt='Penalty'  width='32' height='32'>";
 			$contract_total=0;
@@ -74,17 +83,19 @@ include_once("header.php");
 				
 				$date_show=substr($date_reg, 8,2)."-".substr($date_reg, 5,2)."-".substr($date_reg, 2,2);
 				
-				$content.="<tr><td>$Num</td><td>$fi_id</td><td>$date_show</td><td>$row[5]</td>
+				echo "<tr><td>$Num</td><td>$fi_id</td><td>$date_show</td><td>$row[5]</td>
 					<td>$row[6]</td><td>$row[7]</td><td>$sum</td><td>$vat</td><td>$Currencies[$cur]</td>
 						<td><a href='delete_invoice.php?val=$id' > <img src='/re/css/delete.png' alt='Delete' title='Удалить' ></a></td></tr>";
 			}
 			$contract_total=number_format($contract_total,2,'.',' ');
-			$content.="<tr><td colspan=\"10\" align=\"left\"> <b>ИТОГО:</b> $contract_total рублей </td></tr></table>";
-			
-		$content.='<a href="select_tenant.php" > <img src="/re/src/arrow_left.png" alt="Go back" title="Back" width="64" height="64"></a>
-		<a href="invoice_form.php?val='.$id.'" > <img src="/re/src/red-plus.png" alt="Create" title="Create invoice" width="64" height="64"></a>
-		<a href="show_ledger.php?val='.$id.'" > <img src="/re/src/registry.jpg" alt="Реестр" title="Перечень счетов" width="64" height="64"></a>';
-Show_page($content);
+			echo "<tr><td colspan=\"10\" align=\"left\"> <b>ИТОГО:</b> $contract_total рублей </td></tr>";
+			echo "</table>"; 
+		echo <<<_END
+		<a href="select_tenant.php" > <img src="/re/src/arrow_left.png" alt="Go back" title="Back" width="64" height="64"></a>
+		<a href="invoice_form.php?val=$id" > <img src="/re/src/red-plus.png" alt="Create" title="Create invoice" width="64" height="64"></a>
+		<a href="show_ledger.php?val=$id" > <img src="/re/src/registry.jpg" alt="Реестр" title="Перечень счетов" width="64" height="64"></a>
+_END;
 				
 mysqli_close($db_server);
 ?>
+</body></html>

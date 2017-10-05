@@ -1,4 +1,5 @@
 <?php
+include ("header.php");
 include ("login_re.php"); 
 				
 				$contractid=$_REQUEST['id'];
@@ -12,7 +13,7 @@ include ("login_re.php");
 				$comments= $_REQUEST['comments'];
 				$revenue= $_REQUEST['revenue'];
 				$cur=$Currencies[$currency];
-				
+				//var_dump($_REQUEST);
 				$invoices_to_block=array();
 	/*
 				var_dump($contractid);
@@ -20,7 +21,7 @@ include ("login_re.php");
 				var_dump($date_d);
 				var_dump($date_m);
 				var_dump($date_y);
-	**/
+	*/
 				$db_server = mysqli_connect($db_hostname, $db_username,$db_password);
 				$db_server->set_charset("utf8");
 				If (!$db_server) die("Can not connect to a database!!".mysqli_connect_error($db_server));
@@ -28,13 +29,13 @@ include ("login_re.php");
 		
 				// 1. find relevant condition
 				
-				$condsql='SELECT  min_payment,currency,percentage,pay_terms FROM conditions WHERE contract_id="'.$contractid.'" AND isValid=1';
+				$condsql='SELECT  min_payment,currency,percentage,pay_terms FROM conditions WHERE contract_id='.$contractid.' AND isValid=1';
 				$answsql=mysqli_query($db_server,$condsql);
 				$num=mysqli_num_rows($answsql);
 				if($num)
 				   $cData= mysqli_fetch_row($answsql);
 				else 
-					echo "DATABASE ERROR: Conditions not found!";
+					echo "DATABASE ERROR: Contract not found!";
 				
 				$min=$cData[0];
 				$cur_cond=$cData[1];
@@ -74,10 +75,10 @@ include ("login_re.php");
 				else $input_string="<input hidden type=\"text\" name=\"invoice[0]\" class=\"value\" value=\"NULL\">";
 				// 3. Prepare the invoice
 				
-				if($type==1)
+				if($type==1) //
 				{
 					$result=0;
-					$revbased=$pct*$revenue/100;
+					$revbased=$pct*$revenue;
 						if($revbased>=$min)
 							$result=$revbased;
 						else
@@ -86,78 +87,61 @@ include ("login_re.php");
 				
 				// 4. Inform user
 				
-?>
-<html lang="ru">
-	<head>
-		<title>Создать счет по контракту</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf8" />
-		
-		<link rel="stylesheet" type="text/css" href="/re/css/style.css" />
-		<!--[if lt IE 9]> 
-			<script type="text/javascript" src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-		<![endif]-->
-		<!--<script type="text/javascript" src="./js/jquery.js"></script>-->
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-	</head>
-	<body>
+
 	 
 
-		<h1>Найдены счета:</h1>
-		<table><tr><th>#</th><th>Период</th><th>Сумма</th><th>Валюта</th><th>Дата создания</th></tr>
-		<?php
+		$content='<h1>Найдены счета:</h1>';
+		$content.='<table class="fullTab"><tr><th>#</th><th>Период</th><th>Сумма</th><th>Валюта</th><th>Дата создания</th></tr>';
+		
 			for($i=0;$i<$num;$i++)
 			{
 				$ipl=$i+1;
 				$date_show=substr($invData[$i][2], 8,2)."-".substr($invData[$i][2], 5,2)."-".substr($invData[$i][2], 2,2);
 				$inv_date=sprintf("%02d-%02d",$invData[$i][5],$invData[$i][6]);
 				$inv_sum=number_format($invData[$i][3],2,'.',' ');
-				echo "<tr><td>$ipl</td><td>".$inv_date."</td><td>".$inv_sum."</td><td>$cur</td>
+				$content.="<tr><td>$ipl</td><td>".$inv_date."</td><td>".$inv_sum."</td><td>$cur</td>
 					<td>".$date_show."</td></tr>";
 			}
-		?>
-		</table>
 		
-		<h1>Новый счет:</h1>
+		$content.='</table>';
+		
+		$content.='<h1>Новый счет:</h1>
 		<form id="form" method="post" action="book_invoice.php" >
-		<table><tr><th>#</th><th>Период</th><th>Сумма</th><th>Валюта</th></tr>
-		<?php
+		<table class="fullTab"><tr><th>#</th><th>Период</th><th>Сумма</th><th>Валюта</th></tr>';
 				$period=sprintf("%02d-%02d",$date_m,$date_y);
 				$result_print=number_format($result,2,'.',' ');
-				echo "<tr><td>1</td><td>$period</td><td>$result_print</td><td>".$Currencies[$cur_cond]."</td></tr>";
-		?>
-		</table>
-		<p>Действия со счетом:</p>
+				$content.="<tr><td>1</td><td>$period</td><td>$result_print</td><td>".$Currencies[$cur_cond]."</td></tr></table>";
+	
+		$content.='<p>Действия со счетом:</p>
 			<div id="action_type">
-			<table>
+			<table class="fullTab">
 				<tr>
 					<td><p>Зарегистрировать<input type="radio" id="reg" name="action"  value="1"></p></td>
 					<td><p>Отменить<input type="radio" id="cancel" name="action"  value="0"></p></td>
 				</tr>
-			</table>
-			
-			</div>
-			
-			<input hidden type="text" name="id" class="send" value=<?php echo $contractid;?>>
-			<input hidden type="text" name="billing_type" class="send" value=<?php echo $type;?>>
-			<input hidden type="text" name="vat" class="send" value=<?php echo $vat;?>>
-			<input hidden type="text" name="currency" class="send" value=<?php echo $currency;?>>
-			<input hidden type="text" name="client" class="send" value=<?php echo $clientid;?>>
-			<input hidden type="text" name="date_d" class="date" value=<?php echo $date_d;?>>
-			<input hidden type="text" name="date_m" class="date" value=<?php echo $date_m;?>>
-			<input hidden type="text" name="date_y" class="date" value=<?php echo $date_y;?>>
-			<input hidden type="text" name="value" class="value" value=<?php echo $result;?>>
-			<input hidden type="text" name="comments" class="comments" value=<?php echo $comments;?>>
-			<input hidden type="text" name="revenue" class="revenue" value=<?php echo $revenue;?>>
-			<?php echo $input_string;?>
+			<tr><td colspan="5">
+			<input hidden type="text" name="id" class="send" value='.$contractid.'>
+			<input hidden type="text" name="billing_type" class="send" value="$type">
+			<input hidden type="text" name="vat" class="send" value='.$vat.'>
+			<input hidden type="text" name="currency" class="send" value='.$currency.'>
+			<input hidden type="text" name="client" class="send" value='.$clientid.'>
+			<input hidden type="text" name="date_d" class="date" value="'.$date_d.'">
+			<input hidden type="text" name="date_m" class="date" value="'.$date_m.'">
+			<input hidden type="text" name="date_y" class="date" value="'.$date_y.'">
+			<input hidden type="text" name="value" class="value" value="'.$result.'">
+			<input hidden type="text" name="comments" class="comments" value="'.$comments.'">
+			<input hidden type="text" name="revenue" class="revenue" value="'.$revenue.'">
+			'.$input_string.'
 		<input type="submit" name="send" class="send" value="Дальше ->">
-		
-	</body>
-<?php
-				
-	
-				mysqli_close($db_server);
+			</td></tr>
+			</table>		
+			</div>
+			';				
+	$content.='<br/>';
+	Show_page($content);	
+	mysqli_close($db_server);
 			
-		?>
+?>
 		
 		
 		

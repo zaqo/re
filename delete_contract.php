@@ -9,7 +9,7 @@ include ("login_re.php");
 				If (!$db_server) die("Can not connect to a database!!".mysqli_connect_error($db_server));
 				mysqli_select_db($db_server,$db_database)or die(mysqli_error($db_server));
 			
-				$textsql='UPDATE contract SET isValid = 0 WHERE id="'.id.'"';
+				$textsql='UPDATE contract SET isValid = 0 WHERE id='.$id;
 				
 				//echo $textsql."<br>";
 				$answsql=mysqli_query($db_server,$textsql);

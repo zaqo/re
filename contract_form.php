@@ -1,31 +1,9 @@
 <?php
 include ("login_re.php"); 
-//include ("header.php"); 
+include ("header.php"); 
 //if(!$loggedin) echo "<script>window.location.replace('/Agents/login.php');</script>";
-?>
-<html lang="ru">
-	<head>
-		<title>Создать контракт</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf8" />
-		
-		<link rel="stylesheet" type="text/css" href="/re/css/style.css" />
-		<!--[if lt IE 9]> 
-			<script type="text/javascript" src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-		<![endif]-->
-		<!--<script type="text/javascript" src="./js/jquery.js"></script>-->
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-	</head>
-	<body>
-	 
 
-		<h1>Карточка контракта</h1>
-		
-		<form id="form" method="post" action="add_contract.php" >
-			<p>Арендатор:</p>
-			<div id="client">
-			<?php
-				
-				//Connect to database
+//Connect to database
 				$db_server = mysqli_connect($db_hostname, $db_username,$db_password);
 				$db_server->set_charset("utf8");
 				If (!$db_server) die("Can not connect to a database!!".mysqli_connect_error($db_server));
@@ -44,10 +22,16 @@ include ("login_re.php");
 						$cl_string=$cl_string.'<option value="'.($cls_in[$i][0]).'">'.($cls_in[$i][1]).'</option>';
 					}
 				$cl_string='<select class="client" id="client" name="client"><option value=""></option>'.$cl_string.'</select>';
-				echo $cl_string;?>
-
-			</div>
-			<p>Дата подписания:</p>
+				
+			//Make up Table
+		$content='<table><caption>Карточка контракта</caption>
+		<form id="form" method="post" action="add_contract.php" >
+		<tr><td>Параметр:</td><td>Значение:</td></tr>	
+			<tr><td>Арендатор:</td><td>
+			<div id="client">';
+		$content.=$cl_string;
+		$content.='</div></td></tr>';
+		$content.='<tr><td>Дата подписания:</td><td>
 			<table>
 				<tr><th><p>День:</p></th><th><p>Месяц:</p></th><th><p>Год:</p></th></tr>
 			<tr><td><div id="day"><p> 	
@@ -112,8 +96,8 @@ include ("login_re.php");
 				<option value="2017">2017</option>
 				</select>
 			</p>
-			</td></tr></table>
-			<p>Дата окончания:</p>
+			</td></tr></table></td></tr>';
+			$content.='<tr><td>Дата окончания:</td><td>
 			<table>
 				<tr><th><p>День:</p></th><th><p>Месяц:</p></th><th><p>Год:</p></th></tr>
 			<tr><td>
@@ -172,7 +156,7 @@ include ("login_re.php");
 				</select></p></label>
 			</div>
 			</td><td>
-			<p>Год: <select name="exp_date_y" id="yto" class="date" >
+			<p><select name="exp_date_y" id="yto" class="date" >
 				<option value="" hidden> Выбрать </option>
 				<option value="2017">2017</option>
 				<option value="2018">2018</option>
@@ -180,52 +164,56 @@ include ("login_re.php");
 				<option value="2020">2020</option>
 				</select>
 			</p>
-			</td></tr></table>
-			<p>Тип контракта: <select name="type" id="type" class="option" >
+			</td></tr></table></td></tr>';
+			$content.='<tr><td><p>Тип контракта:</p></td><td> <select name="type" id="type" class="option" >
 				<option value="" hidden> Выбрать </option>
 				<option value="1">нарастающим итогом</option>
 				<option value="2"> % от выручки ИЛИ MIN</option>
 				<option value="3"> % от выручки + MIN</option>
 				<option value="4"> % от выручки  в Месяц</option>
 				</select>
-			</p>
-			<p>НДС: <select name="vat" id="vat" class="option" >
+			</td></tr>
+			<tr><td><p>НДС:</p></td><td><select name="vat" id="vat" class="option" >
 				<option value="" hidden> Выбрать </option>
 				<option value="18">18%</option>
 				<option value="10"> 10%</option>
 				<option value="0"> без НДС</option>
 				</select>
-			</p>
-			<p>Валюта: <select name="currency" id="cur" class="option" >
+			</td></tr>
+			<tr><td><p>Валюта:</p></td><td><select name="currency" id="cur" class="option" >
 				<option value="" hidden> Выбрать </option>
 				<option value="1">RUR</option>
 				<option value="2">EUR</option>
 				<option value="3">USD</option>
 				</select>
-			</p>
-			<p>Номер контракта:</p>
+			</td></tr>
+			<tr><td><p>Номер контракта:</p></td><td>
 			<div id="number"> 	
 				<p><input type="text" id="num" name="num"></p>
-			</div>
-			<p>Рамочное соглашение:</p>
+			</div></td></tr>
+			<tr><td><p>Рамочное соглашение:</p></td><td>
 			<div id="haveFramework">
-			<table>
-				<tr>
-					<td><p>Да<input type="radio" id="yes" name="feedback" onclick="javascript:yesnoCheck();" value="1"></p></td>
-					<td><p>Нет<input type="radio" id="no" name="feedback"  onclick="javascript:yesnoCheck();" value="0"></p></td>
-				</tr>
-			</table>
-			</div>
-			<p>Комментарий:</p>
+		
+				
+					<p>Да<input type="radio" id="yes" name="feedback" onclick="javascript:yesnoCheck();" value="1"></p>
+					<p>Нет<input type="radio" id="no" name="feedback"  onclick="javascript:yesnoCheck();" value="0" checked/></p>
+
+			</div></td></tr>
+			<tr><td><p>Комментарий:</p></td><td>
 			<div id="Comment"> 	
 				<p><textarea rows="5" cols="45" id="text" name="comments"></textarea></p>
 			</div>
-			
-			<p><div id="errors"></div></p>	
-			<p><input type="submit" name="send" class="send" value="ВВОД"></p>
-		</form>
+			</td></tr>
+			<tr><td colspan="2"><p><div id="errors"></div></p>	
+			<p><input type="submit" name="send" class="send" value="ВВОД"></p></td></tr>
+		</table></form>';
 		
-		<script>
+		
+		Show_page($content);
+			mysqli_free_result($answsql);
+			mysqli_close($db_server);
+
+/*	<script>
 		$('form').submit(function(event){
 			var year_cond =($("#yto").val()<$("#yfr").val());
 			var year_cond_eq =($("#yto").val()===$("#yfr").val());
@@ -250,10 +238,5 @@ include ("login_re.php");
 				return;
 		});	
 		
-		</script>
-
-<?php			mysqli_free_result($answsql);
-			mysqli_close($db_server);
-?>
-	</body>
-</html>
+		</script>*/
+		?>

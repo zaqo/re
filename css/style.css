@@ -11,16 +11,48 @@ table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
 	margin:0px auto;
-	table-layout:auto;
-   width: 50%;
+	align: left;
+	width: 20%;
 }
-
+table.myTab {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+	margin:0px auto;
+	text-align: center;
+	align: center;
+	table-layout:fixed;
+	width: 80%;
+}
+ .col1 { width: 5px; }
+   .col2 { width: 30px; }
+   .col3 { width: 40px; }
+   .col4 { width: 30px; }
+   .col5 { width: 20px; }
+   .col6 { width: 20px; }
+   .col7 { width: 100px; }
+   .col8 { width: 20px; }
+   .col9 { width: 30px; }
+   .col10 { width: 20px; }
+table.fullTab {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+	margin:0px auto;
+	text-align: center;
+	align: center;
+	width: 70%;
+}
 td, th {
     border: 1px solid #dddddd;
     text-align: center;
     padding: 8px;
+	width: 20%;
 }
 
+td input[type="checkbox"] {
+    float: left;
+    margin: 0 auto;
+    width: 100%;
+}
 tr:nth-child(even) {
     background-color: #dddddd;
 }
@@ -119,10 +151,22 @@ input {
 	background-position: center left;
 	background-repeat: no-repeat;
 	position:absolute;
-	top: 30px;
+	top: 13px;
 	left: 320px;
 }
-
+.deletebutton_bundle {
+	width: 20px;
+	height: 22px;
+	cursor: pointer;
+	margin: 5px;
+	display:inline-block;
+	background: url(delete.png) repeat;
+	background-position: center left;
+	background-repeat: no-repeat;
+	position:absolute;
+	top: -5px;
+	left: 320px;
+}
 .add {
 	position:relative;
 }
@@ -131,7 +175,7 @@ caption {
   font-weight: bold;
   font-size: 2em;
   padding: 10px; 
-  color: #F3CD26;
+  color: navy;
   text-shadow: 1px 1px 0 rgba(0,0,0,.3);
  }
 caption:before, caption:after {
@@ -149,4 +193,20 @@ caption:before, caption:after {
 	text-align: center;
 	padding: 3px;
    }
+   tab1 { padding-left: 4em; }
+    tab2 { padding-left: 8em; }
+    tab3 { padding-left: 12em; }
+    tab4 { padding-left: 16em; }
+    tab5 { padding-left: 20em; }
+    tab6 { padding-left: 24em; }
+    tab7 { padding-left: 28em; }
+    tab8 { padding-left: 32em; }
+    tab9 { padding-left: 36em; }
+    tab10 { padding-left: 40em; }
+    tab11 { padding-left: 44em; }
+    tab12 { padding-left: 48em; }
+    tab13 { padding-left: 52em; }
+    tab14 { padding-left: 56em; }
+    tab15 { padding-left: 60em; }
+    tab16 { padding-left: 64em; }
   

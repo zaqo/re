@@ -7,7 +7,7 @@
 			<script src="/re/js/menu.js"></script>
 			<meta http-equiv="Content-Type" content="text/html; charset=utf8" />
 		
-			<link rel="stylesheet" type="text/css" href="/Agents/css/style.css" />
+			<link rel="stylesheet" type="text/css" href="/re/css/style.css" />
 			<!--[if lt IE 9]> 
 			<script type="text/javascript" src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 			<![endif]-->
@@ -28,7 +28,7 @@
 		$userstr = " ($user)";
 	}
 	else $loggedin = TRUE; //FALSE;
-	echo "<title>Real Estate</title>".
+	echo "<title>Аренда</title>".
 	"</head><body>";
 	$status=0; // Delete it later on
 	if ($loggedin)
@@ -39,9 +39,11 @@
 				<button onclick='myFunction()' class='dropbtn'>Меню</button>
 				<div id=\"myDropdown\" class=\"dropdown-content\">
 				<a href=\"select_tenant.php\">Выбор арендатора</a>
+				<a href=\"contract_form.php\">Новый контракт</a>
+				<a href=\"select_month.php\">Создать счета за месяц</a>
 				<a href=\"logout.php\">Выйти из системы</a>
 				</div>
-			</div>
+			</div><hr>
 			";//<div class=\"userid\">Вы вошли в систему как: $userstr</div>
 		}
 		/*

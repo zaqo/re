@@ -1,8 +1,8 @@
 ﻿<?php
 include ("login_re.php");
 include_once("header.php"); 
+include_once("functions.php");
    //set_time_limit(0);
-
 
 	$id= $_REQUEST['val'];
 	
@@ -28,7 +28,7 @@ include_once("header.php");
 				if (!$cData[7]) $frame="-";
 				$content='';
 				$content.="
-						<table class=\"fullTab\">
+						<table>
 							<tr><th colspan='2' ><p>Контракт:</p></th></tr>
 							<tr><td ><p>Номер: </p></td><td>$cData[2]</td></tr>
 							<tr><td ><p>Дата: </p></td><td>$cdate_reg_show</td></tr>
@@ -53,11 +53,10 @@ include_once("header.php");
 
 			$content.="<br><hr><br><div class='colortext'> СЧЕТА ПО КОНТРАКТУ:</div>";
 				
-			$content.="<br><table class=\"myTab\">";
-			$content.="<tr><th class=\"col1\">№</th><th class=\"col2\">FI</th><th class=\"col3\">Дата</th><th class=\"col4\">Декада</th><th class=\"col5\">Месяц</th>
-				<th class=\"col6\">Год</th><th class=\"col7\">Сумма</th><th class=\"col8\">НДС</th><th class=\"col9\">Валюта</th><th class=\"col10\">Удалить</th></tr>";
-			//$red="<img src='/Agents/src/redcircle.png' alt='Penalty'  width='32' height='32'>";
-			//$green="<img src='/Agents/src/greencircle.png' alt='Penalty'  width='32' height='32'>";
+			$content.="<br><table>";
+			$content.="<tr><th>№</th><th>FI</th><th>Дата</th><th>Декада</th><th>Месяц</th>
+				<th>Год</th><th>Сумма</th><th>НДС</th><th>Валюта</th><th>Удалить</th></tr>";
+			
 			$contract_total=0;
 			for ($j=0; $j<$rows; $j++)
 			{
@@ -82,8 +81,8 @@ include_once("header.php");
 			$content.="<tr><td colspan=\"10\" align=\"left\"> <b>ИТОГО:</b> $contract_total рублей </td></tr></table>";
 			
 		$content.='<a href="select_tenant.php" > <img src="/re/src/arrow_left.png" alt="Go back" title="Back" width="64" height="64"></a>
-		<a href="invoice_form.php?val='.$id.'" > <img src="/re/src/red-plus.png" alt="Create" title="Create invoice" width="64" height="64"></a>
-		<a href="show_ledger.php?val='.$id.'" > <img src="/re/src/registry.jpg" alt="Реестр" title="Перечень счетов" width="64" height="64"></a>';
+		<a href="invoice_form.php?val=$id" > <img src="/re/src/red-plus.png" alt="Create" title="Create invoice" width="64" height="64"></a>
+		<a href="show_ledger.php?val=$id" > <img src="/re/src/registry.jpg" alt="Реестр" title="Перечень счетов" width="64" height="64"></a>';
 Show_page($content);
 				
 mysqli_close($db_server);
