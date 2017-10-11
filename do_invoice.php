@@ -86,10 +86,12 @@ include ("header_tpl.php");
 						<p><label class="w3-text-grey"><b>Период: </label>'.$period.'</b></p>
 						<p><label class="w3-text-grey"><b>Mин.платеж: </label>'.$inv_min_pub.' '.$cur_txt.'</b></p>
 						<p><label class="w3-text-grey"><b> Процент с оборота:</label>   '.$pct_show.'%</b></p>
-						<p><label class="w3-text-grey"><b>Оборот, руб : </label><div class="input_row"><input type="text" class="display" value="" placeholder="1 000 000" /></div></b></p>
+						<p><label class="w3-text-grey"><b>Оборот, руб : </label><div class="input_row"><input type="text" class="display" value="" placeholder="1 000 000" />
+						<button type="button" class="re_button w3-btn w3-white w3-round-xlarge w3-tiny w3-border w3-border-grey w3-hover-yellow" >РАСЧЕТ</button>
+						</div></b></p>
 						
 						<p><label class="w3-text-grey"><b>СУММА:<div id="inv_val"></div></b></p>
-						<p style="margin-left:60px"><button type="button" class="re_button w3-btn w3-grey w3-round-xlarge w3-tiny w3-border w3-border-red w3-hover-yellow" >РАСЧЕТ</button></p>
+						
 						<p>
 							<input hidden type="text" name="billing_type" class="send" value=1>
 							<input hidden type="text" id="min" value='.$min.'>

@@ -131,11 +131,11 @@ color: red;
 .show {display:block;}
 
 input {
-	height: 30px;
-	margin: 5px;
-	width:250px;
-	text-align: right;
-	box-shadow: 0 0 10px red;
+	height: 40px;
+	margin: 3px;
+	width:200px;
+	text-align: center;
+	box-shadow: 0 0 7px red;
 }
 .addbutton {
 	text-align: center;

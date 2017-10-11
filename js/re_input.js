@@ -18,6 +18,8 @@ window.onload = function () {
 		var pct=in_pct.val();
 		var cur=in_cur.val();
 		var result=Math.max(pct*revenue,min);
-		in_result.text(result+' '+cur);
+		var formatter = new Intl.NumberFormat('en');
+		result=formatter.format(result);
+		in_result.html('<p style="margin-left:60px"><b>'+result+' '+cur+'</b></p>');
 	});
 }
