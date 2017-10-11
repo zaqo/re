@@ -1,0 +1,48 @@
+<html lang="ru">
+		<head>
+			<script src="/re/js/OSC.js"></script>
+			<script src="/re/js/menu.js"></script>
+			<script src="/re/js/re_input.js"></script>
+			<meta http-equiv="Content-Type" content="text/html; charset=utf8" />
+		
+			<link rel="stylesheet" type="text/css" href="/re/css/style.css" />
+			<link rel="stylesheet" href="/re/css/w3.css">
+			<!--[if lt IE 9]> 
+			<script type="text/javascript" src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+			<![endif]-->
+			<!--<script type="text/javascript" src="./js/jquery.js"></script>-->
+			<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<title>Аренда</title></head><body><div class='dropdown'>
+				<button onclick='myFunction()' class='dropbtn'>Меню</button>
+				<div id="myDropdown" class="dropdown-content">
+				<a href="select_tenant.php">Выбор арендатора</a>
+				<a href="contract_form.php">Новый контракт</a>
+				<a href="select_month.php">Создать счета за месяц</a>
+				<a href="logout.php">Выйти из системы</a>
+				</div>
+			</div><hr>
+			</html><?xml version="1.0" encoding="utf-8"?>
+		<!DOCTYPE HTML>
+			<html>
+				
+				<body>
+					
+		<div class="w3-card-4">
+			<div class="w3-container w3-grey">
+				<h2>Данные счета</h2>
+			</div>
+		<div class="r_e">
+			<form id="form" class="re_form"><p><label class="w3-text-grey"><b>Клиент: </label>ООО "БУРГЕР РУС"</b></p><p><label class="w3-text-grey"><b>Контракт: </label>1586</b></p><p><label class="w3-text-grey"><b>Период: </label>01 / 17</b></p><p><label class="w3-text-grey"><b>Mин.платеж: </label>400,000  руб.</b></p><p><label class="w3-text-grey"><b>% : </label>0.25</b></p><p><label class="w3-text-grey"><b>Оборот, руб : </label>: <div class="input_row"><input type="text" class="display w3-input w3-border w3-sand" value="" placeholder="1 000 000" /></div></b></p><p><button type="button"  class="re_button w3-btn w3-brown" >Рассчитать</button></p><p align='center'>СУММА:<div id='inv_val'></div></p>
+			<p>
+			
+			<input hidden type="text" name="billing_type" class="send" value=1>
+			<input hidden type="text" id="min" value=400000.00>
+			<input hidden type="text" id="pct" value=0.25>
+		<input type="submit" name="send" class="send" value="ВВОД">
+			</p>
+			</div>		
+			</div><br/>				</body>
+				<footer><hr>All rights reserved by NCG &#169 2017 </footer>
+			</html>
+		
+		

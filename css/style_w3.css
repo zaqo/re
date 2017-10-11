@@ -1,6 +1,9 @@
 @charset "utf-8";
 body {
-    background-color: lightblue;
+    background-color: white;
+	pre {-moz-tab-size: 16;} /* Code for Firefox */
+	pre {-o-tab-size: 16;} /* Code for Opera 10.6-12.1 */
+	pre {tab-size: 16;}
 	}
 
 h1 {
@@ -128,9 +131,11 @@ color: red;
 .show {display:block;}
 
 input {
-	height: 20px;
+	height: 30px;
 	margin: 5px;
-	width:400px;
+	width:250px;
+	text-align: right;
+	box-shadow: 0 0 10px red;
 }
 .addbutton {
 	text-align: center;
