@@ -78,7 +78,7 @@ include ("header_tpl.php");
 							<h2>Данные счета</h2>
 					</div>
 					<div class="r_e">
-						<form id="form" class="re_form">';
+						<form id="form" class="re_form" action="book_invoice.php">';
 				
 				$content.='
 						<p><label class="w3-text-grey"><b>Клиент: </label>'.$client.'</b></p>
@@ -93,11 +93,14 @@ include ("header_tpl.php");
 						<p><label class="w3-text-grey"><b>СУММА:<div id="inv_val"></div></b></p>
 						
 						<p>
-							<input hidden type="text" name="billing_type" class="send" value=1>
-							<input hidden type="text" id="min" value='.$min.'>
-							<input hidden type="text" id="pct" value='.$pct.'>
-							<input hidden type="text" id="currency" value='.$cur_txt.'>
-						<input type="submit" name="send" class="w3-btn w3-red" value="ВВОД">
+							<div id="errors"></div>
+							
+							<input hidden type="text" id="min" value="'.$min.'">
+							<input hidden type="text" id="pct" value="'.$pct.'">
+							<input hidden type="text" id="currency" value="'.$cur_txt.'">
+							<input hidden type="text" id="out_value" value="">
+							<input hidden type="text" id="invoice_id" value="'.$id.'">
+						<button type="button" id="send" class="w3-btn w3-red" value="">ВВОД</button>
 						</p>';
 				
 				$content.='
@@ -106,26 +109,7 @@ include ("header_tpl.php");
 				</div>
 			</div>
 		';
-		$content.='<script>
-// Script to open and close sidebar
-function w3_open() {
-    document.getElementById("mySidebar").style.display = "block";
-    document.getElementById("myOverlay").style.display = "block";
-}
- 
-function w3_close() {
-    document.getElementById("mySidebar").style.display = "none";
-    document.getElementById("myOverlay").style.display = "none";
-}
-
-// Modal Image Gallery
-function onClick(element) {
-  document.getElementById("img01").src = element.src;
-  document.getElementById("modal01").style.display = "block";
-  var captionText = document.getElementById("caption");
-  captionText.innerHTML = element.alt;
-}
-</script>';
+		
 		Show_page($content);
 			mysqli_free_result($answsql);
 			mysqli_close($db_server);

@@ -64,8 +64,8 @@ class Item
 	
 	//$result=SAP_connector($req);
 	$res=SAP_set_order(85);
-	if ($res) echo "Invoice exported to SAP ERP successfully! <br/>";
-	else echo "ERROR: export operation aborted! <br/>";
+	//if ($res) echo "Invoice exported to SAP ERP successfully! <br/>";
+	//else echo "ERROR: export operation aborted! <br/>";
 	
 		echo '<pre>';
 			var_dump($res);

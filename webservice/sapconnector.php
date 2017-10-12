@@ -47,8 +47,8 @@ function SAP_connector($params)
 	//$output=$result->RETURN2->item->MESSAGE_V4;
 	
 	// Вывод запроса и ответа
-	echo "Запрос:<pre>".htmlspecialchars($client->__getLastRequest()) ."</pre>";
-	echo "Ответ:<pre>".htmlspecialchars($client->__getLastResponse())."</pre>";
+	//echo "Запрос:<pre>".htmlspecialchars($client->__getLastRequest()) ."</pre>";
+	//echo "Ответ:<pre>".htmlspecialchars($client->__getLastResponse())."</pre>";
 	
 	// Вывод отладочной информации в случае возникновения ошибки
 	if (is_soap_fault($result)) 
@@ -118,7 +118,7 @@ function SAP_set_order($rec_id)
 	
 	//THESE PARAMS ARE FIXED NOW
 	$cond_type='ZPR0';	
-	$cond_value='10';
+	//$cond_value='10';
 	$service_mode='SO_C';	// CREATE	
 	$req = new Request();
 	 
@@ -185,7 +185,7 @@ function SAP_set_order($rec_id)
 				
 				// 4. SD conditions
 				$item1->COND_TYPE=$cond_type;
-				$item1->COND_VALUE=$cond_value;
+				$item1->COND_VALUE=$val;
 				
 				// 4. Quantity
 				$item1->TARGET_QTY='1'; //FIXED!

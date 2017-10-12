@@ -6,6 +6,7 @@
 			<script src="/re/js/OSC.js"></script>
 			<script src="/re/js/menu.js"></script>
 			<script src="/re/js/re_input.js"></script>
+			<script src="/re/js/form_submit.js"></script>
 			<meta http-equiv="Content-Type" content="text/html; charset=utf8" />
 		
 			<link rel="stylesheet" type="text/css" href="/re/css/style_w3.css" />

@@ -31,4 +31,14 @@ window.onload = function () {
 		    	//производим действия
 			}
 	});
+	-----------------
+	Attribute Setters
+	
+document.getElementsByTagName("H1")[0].setAttribute("class", "democlass");
+	Good:
+element.style.backgroundColor = "red";
+
+Tip: Use the removeAttribute() method to remove an attribute from an element.
+
+Tip: See also the setAttributeNode() method.
 	
