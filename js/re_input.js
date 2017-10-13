@@ -13,6 +13,7 @@ window.onload = function () {
 	// get button
 	var in_button = in_.find('.re_button');
 	var out_button = in_.find('#send');
+	var back_button = in_.find('#back');
     //вешаем на него событие
     in_button.on('click',function(){
 		var revenue=in_display.val();
@@ -32,19 +33,40 @@ window.onload = function () {
 		var rev=$('.r_e').find('.display').val();
 		var res=$('.r_e').find('#out_value').val();
 		var inv_id=$('.r_e').find('#invoice_id').val();
-		var done_sap='';
-		//alert(res);
+		
+		
 		$.post( "book_invoice.php", { id: inv_id, invoice: res, revenue: rev })
 		  .done(function( data ) {
-			$('.r_e').empty();
-			$('.r_e').html('<h1>'+data.toString()+'</h1>');
 			
-		});
-		//alert(done_sap);
+			
+			var x = document.getElementsByTagName("button")[0];
+			var y = document.getElementsByTagName("button")[1];
+			
+				x.style.display = "none";
+				y.style.display = "none";
+				document.getElementById("input_row").disabled = true;
+			if (data)
+				$('#returned').html('<span class="w3-opacity"><h2> Заказ №: '+data.toString()+'</h2></span>');
+			else
+				$('#errors').html('<span class="w3-opacity"><h2> Ошибка при передаче в SAP ERP: '+data.toString()+'</h2></span>');
+			
+		}).fail(function( data ) {    
+					var response = data.responseText;
+					var parser = new DOMParser();
+					//var errors=document.getElementById("#errors");
+					xmlDoc = parser.parseFromString(response,"text/xml");
+					//
+					var resp_1=xmlDoc.getElementsByTagName("title")[0].childNodes[0].nodeValue;
+					var resp_2=xmlDoc.getElementsByTagName("h2")[0].childNodes[0].nodeValue;
+					//var title=$(response).find("title");
+					$('#errors').html(' <p><b>'+resp_1+': '+resp_2+'</b></p>');
+				});
 	});
-	
+	back_button.on('click', function(){
+		history.go(-1);
+	});
 }
-function listAllProperties(o) {
+function listAllProperties(o) {//gives all properties of Object, can do it also by Object.keys
 	var objectToInspect;     
 	var result = [];
 	
