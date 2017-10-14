@@ -76,3 +76,11 @@ function listAllProperties(o) {//gives all properties of Object, can do it also 
 	
 	return result; 
 }
+function openTub(tubID) {
+    var i;
+    var x = document.getElementsByClassName("tubs");
+    for (i = 0; i < x.length; i++) {
+        x[i].style.display = "none";
+    }
+    document.getElementById(tubID).style.display = "block";
+}

@@ -1,13 +1,23 @@
 <?php
 include ("login_re.php"); 
-include ("header.php"); 
+include ("header_tpl.php"); 
 //if(!$loggedin) echo "<script>window.location.replace('/Agents/login.php');</script>";
 
-	 $content='<table>
-		<caption>Выберите арендатора</caption>
-		<form id="form" method="post" action="list_contracts.php" >
-			<tr><td><b>Компания:</b></td></tr>
-			<tr><td><div id="client">';
+	 $content='
+			<!-- !PAGE CONTENT! -->
+			<div class="w3-main" style="margin-left:340px;margin-right:40px">
+
+			<!-- Header -->
+			<div class="w3-container" style="margin-top:0px" id="showcase">
+				<h1 class="w3-jumbo w3-text-grey"><b>#ИНВОЙСИРОВАНИЕ</b></h1>
+				<h1 class="w3-xxxlarge w3-text-red"><b>коммерческая аренда</b></h1>
+				<hr style="width:50px;border:5px solid red" class="w3-round">
+			</div>';
+	 $content.='
+		<div class="w3-card-4">
+			<div class="w3-container w3-grey">
+				<h2>ВЫБЕРИТЕ КОНТРАГЕНТА</h2>		
+			</div>';
 
 				
 				//Connect to database
@@ -28,11 +38,22 @@ include ("header.php");
 						$cls_in[$i]= mysqli_fetch_row($answsql);
 						$cl_string=$cl_string.'<option value="'.($cls_in[$i][0]).'">'.($cls_in[$i][1]).'</option>';
 					}
-				$cl_string='<select class="client" id="client" name="client"><option value=""></option>'.$cl_string.'</select>';
-				$content.=$cl_string;
-			$content.='</div></td></tr>
-			<tr><td><p><input type="submit" name="send" class="send" value="ВВОД"></p></td></tr>
-		</form></table>';
+				$cl_string='<select class="client w3-input w3-border" id="client" name="client"><option value=""></option>'.$cl_string.'</select>';
+				
+			//$content.='</div></td></tr>
+			//<tr><td><p><input type="submit" name="send" class="send" value="ВВОД"></p></td></tr>
+		//</form></table>';
+		$content.='<div class="w3-container" id="contact" style="margin-top:75px">
+    
+    <form action="/re/list_contracts.php" target="_blank">
+      <div class="w3-section">
+        <label><b>Компания</b></label>
+        '.$cl_string.'
+      </div>
+      
+      <button type="submit" class="w3-button w3-padding-large w3-red w3-margin-bottom">ВВОД</button>
+    </form>  
+  </div></div>';
 		Show_page($content);
 			mysqli_free_result($answsql);
 			mysqli_close($db_server);

@@ -72,7 +72,7 @@ include ("header_tpl.php");
 				}
 		$rev_block='';
 		$val_block='';
-		$order_block.='<p><label class="w3-text-grey"><b>Заказ SD: </label><div class="sd_order">'.$order_id.'</div></b></p>';
+		$order_block='<p><label class="w3-text-grey"><b>Заказ SD: </label><div class="sd_order">'.$order_id.'</div></b></p>';
 		$enter_button='';
 		$header='';
 		if($done_flag)
@@ -97,15 +97,15 @@ include ("header_tpl.php");
 
 			<!-- Header -->
 			<div class="w3-container" style="margin-top:0px" id="showcase">
-				<h1 class="w3-jumbo w3-text-grey"><b>СЧЕТ</b></h1>
+				<h1 class="w3-jumbo w3-text-grey"><b>#СЧЕТ</b></h1>
 				<h1 class="w3-xxxlarge w3-text-red"><b>'.$header.'</b></h1>
 				'.$hr_block.'
-			</div></div>';
+			</div>';
 	
 	
 	$content.='	<div class="w3-card-4">
 					<div class="w3-container w3-grey">
-							<h2>Данные счета</h2>
+							<h2>СЧЕТ # '.$id.'</h2>
 					</div>
 					<div class="r_e">
 						<form id="form" class="re_form" action="book_invoice.php">';

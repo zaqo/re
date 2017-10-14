@@ -22,7 +22,6 @@ table.myTab {
     border-collapse: collapse;
 	margin:0px auto;
 	text-align: center;
-	align: center;
 	table-layout:fixed;
 	width: 80%;
 }
@@ -51,7 +50,8 @@ td, th {
 }
 
 td input[type="checkbox"] {
-    float: left;
+    
+	float: left;
     margin: 0 auto;
     width: 100%;
 }
@@ -73,7 +73,12 @@ div.transbox {
     opacity: 0.6;
     filter: alpha(opacity=60); /* For IE8 and earlier */
 }
-
+input[type="checkbox"] {
+    height: 30px;
+	margin: 3px;
+	width:200px;
+	text-align: center;
+}
 
 div.errorMsg {color: red}
 .errors{color: red}
@@ -136,6 +141,14 @@ input {
 	width:200px;
 	text-align: center;
 	box-shadow: 0 0 7px red;
+}
+input.chkbox {
+    height: 15px;
+	box-shadow: 0 0 0px red;
+    text-align: left;	
+	padding: 200px;
+	 position: relative;
+    display: inline-block;
 }
 .addbutton {
 	text-align: center;
@@ -220,10 +233,10 @@ caption:before, caption:after {
    }
    /*I GUESS THIS IS FOR PRINT FORM FOR DOCTORS*/
    tab1 { padding-left: 4em; }
-    tab2 { padding-left: 8em; }
+    tab2 { padding-left: 8em;  }
     tab3 { padding-left: 12em; }
     tab4 { padding-left: 16em; }
-    tab5 { padding-left: 20em; }
+    tab5 { padding-left: 20em;}
     tab6 { padding-left: 24em; }
     tab7 { padding-left: 28em; }
     tab8 { padding-left: 32em; }
