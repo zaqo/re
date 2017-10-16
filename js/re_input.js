@@ -76,11 +76,18 @@ function listAllProperties(o) {//gives all properties of Object, can do it also 
 	
 	return result; 
 }
-function openTub(tubID) {
-    var i;
-    var x = document.getElementsByClassName("tubs");
+function openTub(e,tubID) {
+    var i,x,tablinks;
+
+    x = document.getElementsByClassName("tabs");
     for (i = 0; i < x.length; i++) {
         x[i].style.display = "none";
     }
+	
+	tablinks = document.getElementsByClassName("tablink");
+    for (i = 0; i < x.length; i++) {
+       tablinks[i].className = tablinks[i].className.replace(" w3-red", "");
+    }
     document.getElementById(tubID).style.display = "block";
+	e.currentTarget.className += " w3-red";
 }

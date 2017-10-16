@@ -42,6 +42,7 @@ include_once("header_tpl.php");
 					
 				if ($cData[0]) $status="checked";
 				if (!$cData[6]) $frame="-";
+				if (!$cData[1]) $c_num_erp="-";
 				$content='
 			<!-- !PAGE CONTENT! -->
 			<div class="w3-main" style="margin-left:340px;margin-right:40px">
@@ -54,6 +55,7 @@ include_once("header_tpl.php");
 				</div>';
 	 $content.='
 				<div class="w3-container" id="packages" style="margin-top:0px">	
+				<h1 class="w3-xxxlarge w3-text-red"><b>'.$client_name.'</b></h1>
 					<p>НДС приведен справочно. Информацию необходимо уточнять в SAP ERP.</p>
 				</div>';
 				$c_status="<input type='checkbox' name='isValid' class='w3-input w3-border chkbox' value='isValid' $status disabled/>";
@@ -117,24 +119,24 @@ include_once("header_tpl.php");
 
 			//$content.="<br><hr><br><div class='colortext'> СЧЕТА ПО КОНТРАКТУ:</div>";
 			 $content.='
-				<div class="w3-container " id="invoices" style="margin-top:75px">
-					<h1 class="w3-xxxlarge w3-text-red"><b>Открытые счета.</b></h1>
+				<hr><div class="w3-container " id="invoices" style="margin-top:75px">
+					<h1 class="w3-xxxlarge w3-text-red"><b>открытые счета.</b></h1>
 					<hr style="width:50px;border:5px solid red" class="w3-round">
-					<p>По указанным счетам необходимо ввести данные для фактурирования.</p>
+					<div class="w3-border">
 				';	
-			$table_semi='<table class="myTab w3-table-all tubs" id="tab_semi" style="text-align:center">';
-			$table_done='<table class="myTab w3-table-all tubs" id="tab_done" style="display:none">';
+			$table_semi='<div id="tab_semi" class="tabs"><table class="myTab w3-table-all w3-margin-top w3-margin-bottom"  style="text-align:center ">';
+			$table_done='<div id="tab_done" class="tabs" style="display:none"><table class="myTab w3-table-all w3-margin-top w3-margin-bottom" >';
 			$colspan=8;
-			$common_block='<tr><th class="col1">№</th><th class="col2" style="text-align:center">Номер заказа</th><th class="col3">Дата</th>';
+			$common_block='<tr><th class="col1">№</th><th class="col2" style="text-align:center">Номер заказа</th><th class="col3" style="text-align:center">Дата</th>';
 			
 			if($pay_terms==1) //decade
 			{
 				
-				$common_block.='<th class="col4">Декада</th>';
+				$common_block.='<th class="col4">Дек.</th>';
 				$colspan=9;
 			}
 			$common_block.='<th class="col5">Месяц</th><th class="col6">Год</th>
-						<th class="col7">Сумма</th>
+						<th class="col7" style="text-align:center">Сумма</th>
 						<th class="col9">Валюта</th><th class="col10"></th></tr>';
 			$table_done.=$common_block;
 			$table_semi.=$common_block;
@@ -142,9 +144,13 @@ include_once("header_tpl.php");
 			//$green="<img src='/Agents/src/greencircle.png' alt='Penalty'  width='32' height='32'>";
 			$semi_total=0;
 			$done_total=0;
+			
+			$Num_semi=0; //this is to calculate position for different tables 
+			$Num_done=0;
+			
 			for ($j=0; $j<$rows; $j++)
 			{
-				$Num=$j+1;
+			
 				$type="";
 				$row= mysqli_fetch_row($answsql);
 				$inv_id=$row[0];
@@ -161,34 +167,49 @@ include_once("header_tpl.php");
 				$proc_flag=$row[9];
 				$tab_row='';
 				$date_show=substr($date_reg, 8,2)."-".substr($date_reg, 5,2)."-".substr($date_reg, 2,2);
-				
+				if($proc_flag)
+				{
+					
+					$Num_done+=1;
+					$Num=$Num_done;
+				}
+				else
+				{
+					
+					$Num_semi+=1;
+					$Num=$Num_semi;
+				}
 				$tab_row.="<tr><td>$Num</td><td>$sd_id</td><td style='text-align:center'>$date_show</td>";
 				if($pay_terms==1)
 					$tab_row.="<td style='text-align:center'>$decade</td>";
-				$tab_row.="<td style='text-align:center'>$month</td><td <td style='text-align:center'>$year</td><td style='text-align:right'>$sum</td><td>$Currencies[$cur]</td>";
+				$tab_row.="<td style='text-align:center'>$month</td><td <td style='text-align:center'>$year</td><td class='col7' style='text-align:right'>$sum</td><td>$Currencies[$cur]</td>";
 				$tab_row.="	<td style='text-align:center'><a id='rev' href='do_invoice.php?id=$inv_id'><img src='/re/src/do3.gif'  width='30' height='30' alt='Do' title='Обработать' ></a></td>";
 				//$content.="	<td><a href='delete_invoice.php?id=$inv_id' > <img src='/re/css/delete.png' alt='Delete' title='Удалить' ></a></td></tr>";
 				if($proc_flag)
 				{
 					$table_done.=$tab_row;
 					$done_total+=$row[6];
+					
 				}
 				else
 				{
 					$table_semi.=$tab_row;
 					$semi_total+=$row[6];
+					
 				}
 			}
 			$done_total=number_format($done_total,2,'.',' ');
 			$semi_total=number_format($semi_total,2,'.',' ');
 			
 			$table_done.="<tr><td colspan=\"$colspan\" style='text-align:center'> <b>ИТОГО:</b> $done_total рублей </td></tr></table></div>";
-			$table_semi.="<tr><td colspan=\"$colspan\" style='text-align:center'> <b>ИТОГО:</b> $semi_total рублей </td></tr></table></div></div>";
+			$table_semi.="<tr><td colspan=\"$colspan\" style='text-align:center'> <b>ИТОГО:</b> $semi_total рублей </td></tr></table></div></div></div>";
+			//MENU BAR
 			$menu_bar=' <div class="w3-bar w3-light-grey intronav">
-							<button class="w3-bar-item w3-button" onclick="openTub(\'tab_done\')">Готовы</button>
-							<button class="w3-bar-item w3-button" onclick="openTub(\'tab_semi\')">В процессе</button>
-						</div> ';
-			$content.=$menu_bar.$table_done.$table_semi;
+							<button class="w3-bar-item w3-button tablink " onclick="openTub(event,\'tab_done\')">Готовы</button>
+							<button class="w3-bar-item w3-button tablink w3-red" onclick="openTub(event,\'tab_semi\')">В процессе</button>
+						</div>';
+			$button='<div class="w3-container"><button id="create_inv" class="w3-button w3-block w3-red w3-margin" style="width:30%" onclick="createInv(\''.$id.'\')">Создать счета</button></div>';
+			$content.=$menu_bar.$table_done.$table_semi.$button;
 		/*	
 		$content.='<a href="select_tenant.php" > <img src="/re/src/arrow_left.png" alt="Go back" title="Back" width="64" height="64"></a>
 		<a href="invoice_form.php?val='.$id.'" > <img src="/re/src/red-plus.png" alt="Create" title="Create invoice" width="64" height="64"></a>

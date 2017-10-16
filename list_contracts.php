@@ -30,7 +30,7 @@ include ("header_tpl.php");
 				<hr style="width:50px;border:5px solid red" class="w3-round">
 			</div>';
 			$content.='
-			<div class="w3-card-4">
+			<div class="w3-card-4 w3-margin">
 				<div class="w3-container w3-grey">
 				<h2>ДОГОВОРА</h2>		
 			</div>';

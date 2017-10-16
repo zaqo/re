@@ -14,11 +14,10 @@ table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
 	margin:0px auto;
-	align: left;
 	width: 20%;
 }
 table.myTab {
-    font-family: arial, sans-serif;
+    font-family: Poppins, sans-serif;
     border-collapse: collapse;
 	margin:0px auto;
 	text-align: center;
@@ -28,7 +27,7 @@ table.myTab {
  .col1 { width: 12px; }
    .col2 { width: 80px; }
    .col3 { width: 80px; }
-   .col4 { width: 30px; }
+   .col4 { width: 40px; }
    .col5 { width: 50px; }
    .col6 { width: 40px; }
    .col7 { width: 100px; }
@@ -292,4 +291,7 @@ caption:before, caption:after {
 }
 .re_button::-moz-focus-inner {
     border: none
+}
+.tablink {
+    font: 700 12px/1 Helvetica, sans-serif;
 }
