@@ -15,11 +15,12 @@ include_once("header_tpl.php");
 
 				$textsql='SELECT contract.isValid,contract.id_SAP,contract.number,contract.date,contract.exp_date,
 							contract.billing_type,contract.frame,contract.VAT,currency.code,contract.comments,client.name,
-							conditions.pay_terms
+							currency.id,service_reg.service_id,conditions.fix_payment,contract.pay_terms
 							FROM  contract 
 							LEFT JOIN client ON client.id=contract.client_id
 							LEFT JOIN currency ON currency.id=contract.currency
 							LEFT JOIN conditions ON contract.id=conditions.contract_id
+							LEFT JOIN service_reg ON contract.id=service_reg.contract_id
 							WHERE contract.id='.$id;
 				$answsql=mysqli_query($db_server,$textsql);
 				if(!$answsql) die("Database look up failed: ".mysqli_error($db_server));
@@ -34,7 +35,15 @@ include_once("header_tpl.php");
 				$c_cur=$cData[8];
 				$c_comments=$cData[9];
 				$client_name=$cData[10];
-				$pay_terms=$cData[11];
+				
+				$c_cur_id=$cData[11];
+				$srv_id=$cData[12];
+				$fix=$cData[13];
+				$pay_terms=$cData[14];
+				$fix_block='';
+				//FOR FIXED PAYMENT CONTRACTS
+				if(!$c_type)
+				$fix_block.='value="'.$fix.'" readonly="readonly"';
 				//var_dump($pay_terms);
 				
 				$cdate_reg_show=substr($cdate_reg,8,2)."-".substr($cdate_reg, 5,2)."-".substr($cdate_reg, 2,2);
@@ -97,7 +106,7 @@ include_once("header_tpl.php");
 							<li class="w3-padding-16">'.$c_num_erp.'</li>
 							<li class="w3-padding-16">'.$cdate_reg_show.'</li>
 							<li class="w3-padding-16">'.$cdate_exp_show.'</li>
-							<li class="w3-padding-16">'.$c_type.'</li>
+							<li class="w3-padding-16">'.$Schema[$c_type].'</li>
 							<li class="w3-padding-16">'.$c_vat.'%</li>
 							<li class="w3-padding-16">'.$c_cur.'</li>
 							<li class="w3-padding-16">'.$c_status.'</li>
@@ -124,20 +133,20 @@ include_once("header_tpl.php");
 					<hr style="width:50px;border:5px solid red" class="w3-round">
 					<div class="w3-border">
 				';	
-			$table_semi='<div id="tab_semi" class="tabs"><table class="myTab w3-table-all w3-margin-top w3-margin-bottom"  style="text-align:center ">';
+			$table_semi='<div id="tab_semi" class="tabs"><table class="myTab w3-table-all w3-margin-top w3-margin-bottom" >';
 			$table_done='<div id="tab_done" class="tabs" style="display:none"><table class="myTab w3-table-all w3-margin-top w3-margin-bottom" >';
-			$colspan=8;
-			$common_block='<tr><th class="col1">№</th><th class="col2" style="text-align:center">Номер заказа</th><th class="col3" style="text-align:center">Дата</th>';
+			$colspan=9;
+			$common_block='<tr><th class="col1" style="text-align:left; vertical-align:middle;">№</th><th class="col2" style="text-align:center" >Номер заказа</th><th class="col3" style="text-align:center; vertical-align:middle;">Дата</th>';
 			
 			if($pay_terms==1) //decade
 			{
 				
-				$common_block.='<th class="col4">Дек.</th>';
-				$colspan=9;
+				$common_block.='<th class="col11" style="text-align:center; vertical-align:middle;">Дек.</th>';
+				$colspan=10;
 			}
-			$common_block.='<th class="col5">Месяц</th><th class="col6">Год</th>
-						<th class="col7" style="text-align:center">Сумма</th>
-						<th class="col9">Валюта</th><th class="col10"></th></tr>';
+			$common_block.='<th class="col5" style="text-align:center; vertical-align:middle; ">Месяц</th><th class="col6" style="text-align:center; vertical-align:middle;">Год</th>
+						<th class="col7" style="text-align:center; vertical-align:middle;">Сумма</th>
+						<th class="col9" style="text-align:center; vertical-align:middle;">Валюта</th><th class="col10"></th><th class="col11" style="text-align:center"></th></tr>';
 			$table_done.=$common_block;
 			$table_semi.=$common_block;
 			//$red="<img src='/Agents/src/redcircle.png' alt='Penalty'  width='32' height='32'>";
@@ -179,12 +188,12 @@ include_once("header_tpl.php");
 					$Num_semi+=1;
 					$Num=$Num_semi;
 				}
-				$tab_row.="<tr><td>$Num</td><td>$sd_id</td><td style='text-align:center'>$date_show</td>";
+				$tab_row.="<tr><td style='text-align:center'>$Num</td><td>$sd_id</td><td style='text-align:center'>$date_show</td>";
 				if($pay_terms==1)
 					$tab_row.="<td style='text-align:center'>$decade</td>";
-				$tab_row.="<td style='text-align:center'>$month</td><td <td style='text-align:center'>$year</td><td class='col7' style='text-align:right'>$sum</td><td>$Currencies[$cur]</td>";
+				$tab_row.="<td style='text-align:center'>$month</td><td <td style='text-align:center'>$year</td><td style='text-align:right'>$sum</td><td>$Currencies[$cur]</td>";
 				$tab_row.="	<td style='text-align:center'><a id='rev' href='do_invoice.php?id=$inv_id'><img src='/re/src/do3.gif'  width='30' height='30' alt='Do' title='Обработать' ></a></td>";
-				//$content.="	<td><a href='delete_invoice.php?id=$inv_id' > <img src='/re/css/delete.png' alt='Delete' title='Удалить' ></a></td></tr>";
+				$tab_row.="	<td ><a href='delete_invoice.php?id=$inv_id' ><img src='/re/css/delete.png' alt='Delete' title='Удалить' ></a></td></tr>";
 				if($proc_flag)
 				{
 					$table_done.=$tab_row;
@@ -202,18 +211,43 @@ include_once("header_tpl.php");
 			$semi_total=number_format($semi_total,2,'.',' ');
 			
 			$table_done.="<tr><td colspan=\"$colspan\" style='text-align:center'> <b>ИТОГО:</b> $done_total рублей </td></tr></table></div>";
-			$table_semi.="<tr><td colspan=\"$colspan\" style='text-align:center'> <b>ИТОГО:</b> $semi_total рублей </td></tr></table></div></div></div>";
+			$table_semi.="<tr><td colspan=\"$colspan\" style='text-align:center'> <b>ИТОГО:</b> $semi_total рублей </td></tr></table></div>";
 			//MENU BAR
 			$menu_bar=' <div class="w3-bar w3-light-grey intronav">
 							<button class="w3-bar-item w3-button tablink " onclick="openTub(event,\'tab_done\')">Готовы</button>
 							<button class="w3-bar-item w3-button tablink w3-red" onclick="openTub(event,\'tab_semi\')">В процессе</button>
 						</div>';
-			$button='<div class="w3-container"><button id="create_inv" class="w3-button w3-block w3-red w3-margin" style="width:30%" onclick="createInv(\''.$id.'\')">Создать счета</button></div>';
-			$content.=$menu_bar.$table_done.$table_semi.$button;
-		/*	
-		$content.='<a href="select_tenant.php" > <img src="/re/src/arrow_left.png" alt="Go back" title="Back" width="64" height="64"></a>
-		<a href="invoice_form.php?val='.$id.'" > <img src="/re/src/red-plus.png" alt="Create" title="Create invoice" width="64" height="64"></a>
-		<a href="show_ledger.php?val='.$id.'" > <img src="/re/src/registry.jpg" alt="Реестр" title="Перечень счетов" width="64" height="64"></a>';*/
+			$inv_form='
+						<div class="w3-container hid_form" id="new_invoice" style="display:none">
+							<h1 class="w3-xxxlarge w3-text-red"><b>новый счет.</b></h1>
+							<hr style="width:50px;border:5px solid red" class="w3-round">
+							<p>заполните данные формы</p>
+							<form action="/re/create_invoice.php" target="_blank">
+								<div class="w3-section">
+									<label><b>Месяц:</b></label>
+									<input class="w3-input w3-border" type="text" name="month" required>
+								</div>
+								<div class="w3-section">
+									<label><b>Год:</b></label>
+									<input class="w3-input w3-border" type="text" name="year" required>
+								</div>
+								<div class="w3-section">
+									<label><b>Цена:</b></label>
+									<input class="w3-input w3-border" type="number" name="value" '.$fix_block.'required>
+								</div>
+								<input hidden type="text" name="id" value="'.$id.'">
+								<input hidden type="text" name="cur" value="'.$c_cur_id.'">
+								<input hidden type="text" name="service" value="'.$srv_id.'">
+								<button type="submit" class="w3-button w3-block w3-padding-large w3-red w3-margin-bottom" onclick="location.reload();">ВВОД</button>
+							</form>
+						</div> </div>
+						';
+			$end_invoices='</div>';
+			$end_page='</div>';
+			$button='<div class="w3-container" id="create_inv"><button id="create_button" class="w3-button w3-block w3-red w3-margin" style="width:30%" onclick="createInv(\'create_button\',\'new_invoice\')">Создать счет</button>';
+			$content.=$menu_bar.$table_done.$table_semi.$end_invoices;
+			$content.=$button.$inv_form.$end_page;
+		
 Show_page($content);
 				
 mysqli_close($db_server);

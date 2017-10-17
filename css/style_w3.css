@@ -20,11 +20,10 @@ table.myTab {
     font-family: Poppins, sans-serif;
     border-collapse: collapse;
 	margin:0px auto;
-	text-align: center;
 	table-layout:fixed;
 	width: 80%;
 }
- .col1 { width: 12px; }
+ .col1 { width: 14px; ;}
    .col2 { width: 80px; }
    .col3 { width: 80px; }
    .col4 { width: 40px; }
@@ -32,8 +31,24 @@ table.myTab {
    .col6 { width: 40px; }
    .col7 { width: 100px; }
    .col8 { width: 50px; }
-   .col9 { width: 50px; }
-   .col10 { width: 60px; }
+   .col9 { width: 56px; }
+   .col10 { width: 50px; }
+   .col11 { width: 26px; }
+table.myContract {
+    font-family: Poppins, sans-serif;
+    border-collapse: collapse;
+	margin:0px auto;
+	table-layout:fixed;
+	width: 100%;
+}
+ .col_1 { width: 15px; }
+   .col_2 { width: 40px; }
+   .col_3 { width: 40px; }
+   .col_4 { width: 40px; }
+   .col_5 { width: 40px; }
+   .col_6 { width: 30px; }
+   .col_7 { width: 100px; }
+   
 table.fullTab {
     font-family: arial, sans-serif;
     border-collapse: collapse;
@@ -43,7 +58,6 @@ table.fullTab {
 }
 td, th {
     border: 1px solid #dddddd;
-    text-align: center;
     padding: 8px;
 	width: 20%;
 }

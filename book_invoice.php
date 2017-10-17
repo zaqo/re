@@ -57,6 +57,7 @@
 				$id=$_REQUEST['id'];
 				$val=$_REQUEST['invoice'];
 				$revenue= $_REQUEST['revenue'];
+				//$srv_id= $_REQUEST['service'];
 				$datetime = new DateTime();
 				$datestr = $datetime->format('d-m-Y');
 				//var_dump($_REQUEST);

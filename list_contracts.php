@@ -35,8 +35,8 @@ include ("header_tpl.php");
 				<h2>ДОГОВОРА</h2>		
 			</div>';
 			
-			$content.='<table class="w3-table-all w3-card-4">';
-			$content.="<tr><th>№</th><th>Номер</th><th>Дата с:</th><th>Дата по:</th><th>НДС %</th><th>Валюта</th><th>Комментарий</th></tr>";
+			$content.='<table class="myContract w3-table-all w3-card-4 ">';
+			$content.="<tr><th class='col_1'>№</th><th class='col_2'>Номер</th><th class='col_2'>Дата с:</th><th class='col_2'>Дата по:</th><th class='col_6'>НДС %</th><th class='col_2'>Валюта</th><th class='col_7'>Комментарий</th></tr>";
 			$red="<img src='/re/src/redcircle.png' alt='Penalty'  width='32' height='32'>";
 			$green="<img src='/re/src/greencircle.png' alt='Bonus'  width='32' height='32'>";
 			for ($j=0; $j<$rows; $j++)

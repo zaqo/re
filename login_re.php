@@ -4,7 +4,8 @@
 	$db_username= 'php';
 	$db_password= '12345';
 	
-	$Currencies=array("","RUR","EUR","USD");
+	$Currencies	=	array("","RUR","EUR","USD");
+	$Schema		=	array("Фиксированный платеж","% от оборота","% или min");
 	
 	//SAP web service
 	$SAP_username= 'PHP_SERVICE';

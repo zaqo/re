@@ -10,6 +10,7 @@ window.onload = function () {
 	var in_min = in_.find('#min');
 	var in_pct = in_.find('#pct');
 	var in_cur = in_.find('#currency');
+	var in_type = in_.find('#type');
 	// get button
 	var in_button = in_.find('.re_button');
 	var out_button = in_.find('#send');
@@ -20,7 +21,19 @@ window.onload = function () {
 		var min=in_min.val();
 		var pct=in_pct.val();
 		var cur=in_cur.val();
-		var result=Math.max(pct*revenue,min);
+		var type=in_type.val();
+		var result;
+		
+		switch(type){
+			case '1':
+				result=pct*revenue;
+				break;
+			case '2':
+				result=Math.max(pct*revenue,min);
+				break;
+			default:
+				alert('WARNING! UNSUPPORTED SCHEME TYPE');
+		}
 		// Finding it in DOM and updating
 		$('#out_value').attr({value: result});
 		
@@ -90,4 +103,14 @@ function openTub(e,tubID) {
     }
     document.getElementById(tubID).style.display = "block";
 	e.currentTarget.className += " w3-red";
+}
+function createInv(but_id,div_id) {
+
+   var x,y;
+   
+   x = document.getElementsByTagName("button")[2];
+	y = document.getElementsByClassName("hid_form")[0];
+			
+				x.style.display = "none";
+				y.style.display = "block";
 }

@@ -22,6 +22,7 @@ include ("header_tpl.php");
 							LEFT JOIN contract ON invoice.contract_id=contract.id
 							LEFT JOIN client ON client.id=contract.client_id
 							LEFT JOIN revenue ON invoice.id=revenue.invoice_id
+							
 							WHERE invoice.id='.$id;
 				
 				
@@ -48,6 +49,7 @@ include ("header_tpl.php");
 				$done_flag=$num[11];
 				$order_id=$num[12];
 				$rev=$num[13];
+				$srv_id=$num[14];
 				$period='';
 				if($month<10)
 					$month='0'.$month;
@@ -110,19 +112,20 @@ include ("header_tpl.php");
 					<div class="r_e">
 						<form id="form" class="re_form" action="book_invoice.php">';
 		
-		$content.='
-						<p><label class="w3-text-grey"><b>Клиент: </label>'.$client.'</b></p>
+		$content.='<p><label class="w3-text-grey"><b>Клиент: </label>'.$client.'</b></p>
 						<p><label class="w3-text-grey"><b>Контракт: </label>'.$c_num.'</b></p>
-						<p><label class="w3-text-grey"><b>Период: </label>'.$period.'</b></p>
-						<p><label class="w3-text-grey"><b>Mин.платеж: </label>'.$inv_min_pub.' '.$cur_txt.'</b></p>
-						<p><label class="w3-text-grey"><b> Процент с оборота:</label>   '.$pct_show.'%</b></p>
+						<p><label class="w3-text-grey"><b>Период: </label>'.$period.'</b></p>';
+		$min_payment=	'<p><label class="w3-text-grey"><b>Mин.платеж: </label>'.$inv_min_pub.' '.$cur_txt.'</b></p>';
+		if(($type==2)||($type==3)) $content.=$min_payment;
+		$content.='		<p><label class="w3-text-grey"><b> Процент с оборота:</label>   '.$pct_show.'%</b></p>
 						<p><label class="w3-text-grey"><b>Оборот : </label><div class="input_row">'.$rev_block.' руб</div></b></p>
 						'.$order_block.'
-						<p><label class="w3-text-grey"><b>СУММА:<div id="inv_val">'.$val_block.$cur_txt.'</div></b></p>
+						<p><label class="w3-text-grey"><b>СУММА:<div id="inv_val">'.$val_block.'</div></b></p>
 						<p>
 							<div id="errors" class="w3-red w3-border-red"></div><div id="returned" class="w3-grey w3-border-grey"></div>
 							<input hidden type="text" id="min" value="'.$min.'">
 							<input hidden type="text" id="pct" value="'.$pct.'">
+							<input hidden type="text" id="type" value="'.$type.'">
 							<input hidden type="text" id="currency" value="'.$cur_txt.'">
 							<input hidden type="text" id="out_value" value="">
 							<input hidden type="text" id="invoice_id" value="'.$id.'">'.$enter_button.'
