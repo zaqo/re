@@ -56,7 +56,8 @@
 
 				$id=$_REQUEST['id'];
 				$val=$_REQUEST['invoice'];
-				$revenue= $_REQUEST['revenue'];
+				if (isset($_REQUEST['revenue']))$revenue=$_REQUEST['revenue'] ;
+				else $revenue=0;
 				//$srv_id= $_REQUEST['service'];
 				$datetime = new DateTime();
 				$datestr = $datetime->format('d-m-Y');

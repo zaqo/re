@@ -1,6 +1,7 @@
 ﻿<?php
 include ("login_re.php");
 include_once("header_tpl.php"); 
+echo '<script src="/re/js/re_input.js"></script>';
    //set_time_limit(0);
 
 
@@ -20,7 +21,7 @@ include_once("header_tpl.php");
 							LEFT JOIN client ON client.id=contract.client_id
 							LEFT JOIN currency ON currency.id=contract.currency
 							LEFT JOIN conditions ON contract.id=conditions.contract_id
-							LEFT JOIN service_reg ON contract.id=service_reg.contract_id
+							LEFT JOIN service_reg ON contract.type=service_reg.contract_type_id
 							WHERE contract.id='.$id;
 				$answsql=mysqli_query($db_server,$textsql);
 				if(!$answsql) die("Database look up failed: ".mysqli_error($db_server));
@@ -31,6 +32,10 @@ include_once("header_tpl.php");
 				$cdate_reg=$cData[3];
 				$cdate_exp=$cData[4];
 				$c_type=$cData[5];
+				$c_action='';
+				if($c_type==0) $c_action='do_invoice_another.php';
+				else $c_action='do_invoice_original.php';
+				
 				$c_vat=$cData[7];
 				$c_cur=$cData[8];
 				$c_comments=$cData[9];
@@ -192,7 +197,7 @@ include_once("header_tpl.php");
 				if($pay_terms==1)
 					$tab_row.="<td style='text-align:center'>$decade</td>";
 				$tab_row.="<td style='text-align:center'>$month</td><td <td style='text-align:center'>$year</td><td style='text-align:right'>$sum</td><td>$Currencies[$cur]</td>";
-				$tab_row.="	<td style='text-align:center'><a id='rev' href='do_invoice.php?id=$inv_id'><img src='/re/src/do3.gif'  width='30' height='30' alt='Do' title='Обработать' ></a></td>";
+				$tab_row.="	<td style='text-align:center'><a id='rev' href='$c_action?id=$inv_id'><img src='/re/src/do3.gif'  width='30' height='30' alt='Do' title='Обработать' ></a></td>";
 				$tab_row.="	<td ><a href='delete_invoice.php?id=$inv_id' ><img src='/re/css/delete.png' alt='Delete' title='Удалить' ></a></td></tr>";
 				if($proc_flag)
 				{
@@ -233,7 +238,7 @@ include_once("header_tpl.php");
 								</div>
 								<div class="w3-section">
 									<label><b>Цена:</b></label>
-									<input class="w3-input w3-border" type="number" name="value" '.$fix_block.'required>
+									<input class="w3-input w3-border" type="number" name="value" value="'.$fix.'" '.$fix_block.'required>
 								</div>
 								<input hidden type="text" name="id" value="'.$id.'">
 								<input hidden type="text" name="cur" value="'.$c_cur_id.'">

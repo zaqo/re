@@ -4,7 +4,6 @@
 
 include ("login_re.php"); 
 include ("header_tpl.php"); 
-echo '<script src="/re/js/re_input.js"></script>';
 //if(!$loggedin) echo "<script>window.location.replace('/Agents/login.php');</script>";
 
 				$id= $_REQUEST['id'];
@@ -33,7 +32,7 @@ echo '<script src="/re/js/re_input.js"></script>';
 				   $num= mysqli_fetch_row($answsql);
 				else 
 					echo "DATABASE ERROR: INVOICE not found!";
-				var_dump($num);
+				//var_dump($num);
 				$inv_val=$num[0];
 				$inv_date=$num[1];
 				$min=$num[2];
@@ -78,22 +77,12 @@ echo '<script src="/re/js/re_input.js"></script>';
 		$order_block='<p><label class="w3-text-grey"><b>Заказ SD: </label><div class="sd_order">'.$order_id.'</div></b></p>';
 		$enter_button='';
 		$header='';
-		$val_block=number_format($inv_val).$cur_txt;
-		if($done_flag)
-		{
-			$header='данные документа';
-			$hr_block='<hr style="width:50px;border:5px solid green" class="w3-round">';
-		}
-		else
-		{
-			
-			$header='регистрация';
-			$hr_block='<hr style="width:50px;border:5px solid red" class="w3-round">';
-		}
-					
-		$input_block='<input hidden type="text" id="out_value" value="'.$inv_val.'"  />';
 		$enter_button='<button type="button" id="send" class="w3-btn w3-white w3-padding-large w3-margin w3-hover-grey w3-border w3-border-red" value="">ВВОД</button>';
-
+		$rev_block='<input hidden type="text" id="out_value" value=""><input type="text" class="display w3-margin" id="input_row" value="" placeholder="1 000 000" />
+						<button type="button" class="re_button w3-btn w3-margin w3-white w3-round-small w3-tiny w3-border w3-border-grey w3-hover-yellow" >РАСЧЕТ</button>';
+		$rev_block_empty='<input hidden type="text" id="out_value" value="'.$inv_val.'"  />';
+		
+		
 	$content='
 			<!-- !PAGE CONTENT! -->
 			<div class="w3-main" style="margin-left:340px;margin-right:40px">
@@ -116,15 +105,42 @@ echo '<script src="/re/js/re_input.js"></script>';
 		$content.='<p><label class="w3-text-grey"><b>Клиент: </label>'.$client.'</b></p>
 						<p><label class="w3-text-grey"><b>Контракт: </label>'.$c_num.'</b></p>
 						<p><label class="w3-text-grey"><b>Период: </label>'.$period.'</b></p>';
+		$min_payment=	'<p><label class="w3-text-grey"><b>Mин.платеж: </label>'.$inv_min_pub.' '.$cur_txt.'</b></p>';
+		
+		$pct_rev_block='<p><label class="w3-text-grey"><b> Процент с оборота:</label>   '.$pct_show.'%</b></p>';
+		$input_rev_block='<p><label class="w3-text-grey"><b>Оборот : </label><div class="input_row">'.$rev_block.' руб</div></b></p>';
+		if ($type==0)
+		{
+			$val_block.=number_format($inv_val);
+			
+			
+			$header='регистрация';
+			$hr_block='<hr style="width:50px;border:5px solid red" class="w3-round">';
+		}
+		elseif($done_flag)
+		{
+			$rev_block.=number_format($rev);
+			$val_block.=number_format($inv_val);
+			
+			$header='данные документа';
+			$hr_block='<hr style="width:50px;border:5px solid green" class="w3-round">';
+		}
+		else{
+			
+			
+			$header='регистрация';
+			$hr_block='<hr style="width:50px;border:5px solid red" class="w3-round">';
+		}							
+		if(($type==2)||($type==3)) $content.=$min_payment.$pct_rev_block;
 		$content.=$order_block;
 		$content.='<p><label class="w3-text-grey"><b>СУММА:<div id="inv_val">'.$val_block.'</div></b></p>
 						<p>
 							<div id="errors" class="w3-red w3-border-red"></div><div id="returned" class="w3-grey w3-border-grey"></div>
-							<input hidden type="text" id="min" value="">
-							<input hidden type="text" id="pct" value="">
+							<input hidden type="text" id="min" value="'.$min.'">
+							<input hidden type="text" id="pct" value="'.$pct.'">
 							<input hidden type="text" id="type" value="'.$type.'">
 							<input hidden type="text" id="currency" value="'.$cur_txt.'">
-							<input hidden type="text" id="invoice_id" value="'.$id.'">'.$input_block.$enter_button.'
+							<input hidden type="text" id="invoice_id" value="'.$id.'">'.$enter_button.'
 							<button type="button" id="back" class="w3-btn w3-white w3-padding-large w3-margin w3-hover-grey w3-border w3-border-black" value="">НАЗАД</button>
 						</p>';
 				

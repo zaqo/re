@@ -17,7 +17,7 @@ echo '<script src="/re/js/re_input.js"></script>';
 				//Prepare data set for the contract
 				$textsql='SELECT  invoice.value,invoice.date,conditions.min_payment,conditions.percentage,contract.billing_type,
 							invoice.decade,invoice.month,invoice.year,client.name,contract.number,invoice.currency,invoice.isProcessed,
-							invoice.id_SD ,revenue.revenue,service_reg.service_id
+							invoice.id_SD ,revenue.revenue,service_reg.service_id,contract.id
 							FROM invoice 
 							LEFT JOIN conditions ON invoice.contract_id=conditions.contract_id
 							LEFT JOIN contract ON invoice.contract_id=contract.id
@@ -33,7 +33,7 @@ echo '<script src="/re/js/re_input.js"></script>';
 				   $num= mysqli_fetch_row($answsql);
 				else 
 					echo "DATABASE ERROR: INVOICE not found!";
-				var_dump($num);
+				//var_dump($cData);
 				$inv_val=$num[0];
 				$inv_date=$num[1];
 				$min=$num[2];
@@ -51,6 +51,7 @@ echo '<script src="/re/js/re_input.js"></script>';
 				$order_id=$num[12];
 				$rev=$num[13];
 				$srv_id=$num[14];
+				$contract_id=$num[15];
 				$period='';
 				if($month<10)
 					$month='0'.$month;
@@ -73,27 +74,44 @@ echo '<script src="/re/js/re_input.js"></script>';
 						$cur_txt='ERROR: WRONG CURRENCY ID!!!';
 						break;
 				}
+		
+		// SECTION FOR TOTAL REVENUE
+		$textsql_1='SELECT  SUM(invoice.value),SUM(revenue.revenue),COUNT(DISTINCT invoice.id )
+							FROM invoice 
+							LEFT JOIN revenue ON invoice.id=revenue.invoice_id
+							WHERE invoice.isValid=1 AND invoice.isProcessed=1 AND invoice.contract_id='.$contract_id.' AND year='.$year;
+				
+				
+				$answsql1=mysqli_query($db_server,$textsql_1);
+				
+		$num1= mysqli_fetch_row($answsql1);
+		if (isset($num1[0])) $pay=$num1[0];
+		else $pay=0;
+		if (isset($num1[1])) $revlimit=$num1[1];
+		else $revlimit=0;
+		if (isset($num1[2])) $min_total=$min*($num1[2]+1);
+		else $min_total=$min;
 		$rev_block='';
 		$val_block='';
 		$order_block='<p><label class="w3-text-grey"><b>Заказ SD: </label><div class="sd_order">'.$order_id.'</div></b></p>';
 		$enter_button='';
 		$header='';
-		$val_block=number_format($inv_val).$cur_txt;
 		if($done_flag)
 		{
+			$rev_block.=number_format($rev);
+			$val_block.=number_format($inv_val).$cur_txt;
+			
 			$header='данные документа';
 			$hr_block='<hr style="width:50px;border:5px solid green" class="w3-round">';
 		}
 		else
 		{
-			
+			$rev_block='<input type="text" class="display w3-margin" id="input_row" value="" placeholder="1 000 000" />
+						<button type="button" class="re_button w3-btn w3-margin w3-white w3-round-small w3-tiny w3-border w3-border-grey w3-hover-yellow" >РАСЧЕТ</button>';
+			$enter_button='<button type="button" id="send" class="w3-btn w3-white w3-padding-large w3-margin w3-hover-grey w3-border w3-border-red" value="">ВВОД</button>';
 			$header='регистрация';
 			$hr_block='<hr style="width:50px;border:5px solid red" class="w3-round">';
-		}
-					
-		$input_block='<input hidden type="text" id="out_value" value="'.$inv_val.'"  />';
-		$enter_button='<button type="button" id="send" class="w3-btn w3-white w3-padding-large w3-margin w3-hover-grey w3-border w3-border-red" value="">ВВОД</button>';
-
+		}			
 	$content='
 			<!-- !PAGE CONTENT! -->
 			<div class="w3-main" style="margin-left:340px;margin-right:40px">
@@ -113,18 +131,26 @@ echo '<script src="/re/js/re_input.js"></script>';
 					<div class="r_e">
 						<form id="form" class="re_form" action="book_invoice.php">';
 		
-		$content.='<p><label class="w3-text-grey"><b>Клиент: </label>'.$client.'</b></p>
+		$content.='
+						<p><label class="w3-text-grey"><b>Клиент: </label>'.$client.'</b></p>
 						<p><label class="w3-text-grey"><b>Контракт: </label>'.$c_num.'</b></p>
-						<p><label class="w3-text-grey"><b>Период: </label>'.$period.'</b></p>';
-		$content.=$order_block;
-		$content.='<p><label class="w3-text-grey"><b>СУММА:<div id="inv_val">'.$val_block.'</div></b></p>
+						<p><label class="w3-text-grey"><b>Период: </label>'.$period.'</b></p>
+						<p><label class="w3-text-grey"><b>Mин.платеж: </label>'.$inv_min_pub.' '.$cur_txt.'</b></p>
+						<p><label class="w3-text-grey"><b> Процент с оборота:</label>   '.$pct_show.'%</b></p>
+						<p><label class="w3-text-grey"><b>Оборот : </label><div class="input_row">'.$rev_block.' руб</div></b></p>
+						'.$order_block.'
+						<p><label class="w3-text-grey"><b>СУММА:<div id="inv_val">'.$val_block.'</div></b></p>
 						<p>
 							<div id="errors" class="w3-red w3-border-red"></div><div id="returned" class="w3-grey w3-border-grey"></div>
-							<input hidden type="text" id="min" value="">
-							<input hidden type="text" id="pct" value="">
+							<input hidden type="text" id="min" value="'.$min.'">
+							<input hidden type="text" id="pct" value="'.$pct.'">
 							<input hidden type="text" id="type" value="'.$type.'">
+							<input hidden type="text" id="revenue" value="'.$revlimit.'">
+							<input hidden type="text" id="min_total" value="'.$min_total.'">
+							<input hidden type="text" id="pay" value="'.$pay.'">
 							<input hidden type="text" id="currency" value="'.$cur_txt.'">
-							<input hidden type="text" id="invoice_id" value="'.$id.'">'.$input_block.$enter_button.'
+							<input hidden type="text" id="out_value" value="">
+							<input hidden type="text" id="invoice_id" value="'.$id.'">'.$enter_button.'
 							<button type="button" id="back" class="w3-btn w3-white w3-padding-large w3-margin w3-hover-grey w3-border w3-border-black" value="">НАЗАД</button>
 						</p>';
 				

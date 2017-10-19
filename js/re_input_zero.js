@@ -8,12 +8,9 @@ window.onload = function () {
 	var show_result = in_.find('#inv_val');
 	var out_result = in_.find('#out_value');
 	var in_min = in_.find('#min');
-	var in_min_t = in_.find('#min_total');
 	var in_pct = in_.find('#pct');
 	var in_cur = in_.find('#currency');
 	var in_type = in_.find('#type');
-	var in_rev = in_.find('#revenue');
-	var in_pay = in_.find('#pay');
 	// get button
 	var in_button = in_.find('.re_button');
 	var out_button = in_.find('#send');
@@ -25,29 +22,14 @@ window.onload = function () {
 		var pct=in_pct.val();
 		var cur=in_cur.val();
 		var type=in_type.val();
-		var rev_limit=in_rev.val();
-		var min_total=in_min_t.val();
-		var pay_total=in_pay.val();
 		var result;
-		rev_limit=parseFloat(rev_limit);
-		//alert(rev_limit+'|'+pct);
-		pct=parseFloat(pct);
-		revenue=parseFloat(revenue);
-		min_total=parseFloat(min_total);
-		var rev_total=(rev_limit+revenue)*pct;
-		//alert(rev_total);
+		
 		switch(type){
 			case '1':
 				result=pct*revenue;
 				break;
 			case '2':
 				result=Math.max(pct*revenue,min);
-				break;
-			case '3':
-				if(rev_total<min_total)
-					result=min_total-pay_total;
-				else
-					result=rev_total-pay_total;
 				break;
 			default:
 				alert('WARNING! UNSUPPORTED SCHEME TYPE');
@@ -64,7 +46,7 @@ window.onload = function () {
 		var rev=$('.r_e').find('.display').val();
 		var res=$('.r_e').find('#out_value').val();
 		var inv_id=$('.r_e').find('#invoice_id').val();
-		
+		var out_div=$('.r_e').find('#returned');
 		
 		$.post( "book_invoice.php", { id: inv_id, invoice: res, revenue: rev })
 		  .done(function( data ) {
@@ -75,11 +57,9 @@ window.onload = function () {
 			
 				x.style.display = "none";
 				//y.style.display = "none";
-				document.getElementById("input_row").disabled = true;
-				
-			if (data){
-				$('.sd_order').html('<span class="w3-opacity"><h2>'+data.toString()+'</h2></span>');
-			}
+				//document.getElementById("input_row").disabled = true;
+			if (data)
+				out_div.html('<span class="w3-opacity"><h2> Заказ №: '+data.toString()+'</h2></span>');
 			else
 				$('#errors').html('<span class="w3-opacity"><h2> Ошибка при передаче в SAP ERP: '+data.toString()+'</h2></span>');
 			

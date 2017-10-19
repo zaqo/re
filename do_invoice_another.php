@@ -4,7 +4,7 @@
 
 include ("login_re.php"); 
 include ("header_tpl.php"); 
-echo '<script src="/re/js/re_input.js"></script>';
+//echo '<script src="/re/js/re_input.js"></script>';
 //if(!$loggedin) echo "<script>window.location.replace('/Agents/login.php');</script>";
 
 				$id= $_REQUEST['id'];
@@ -33,7 +33,7 @@ echo '<script src="/re/js/re_input.js"></script>';
 				   $num= mysqli_fetch_row($answsql);
 				else 
 					echo "DATABASE ERROR: INVOICE not found!";
-				var_dump($num);
+				//var_dump($cData);
 				$inv_val=$num[0];
 				$inv_date=$num[1];
 				$min=$num[2];
@@ -75,25 +75,23 @@ echo '<script src="/re/js/re_input.js"></script>';
 				}
 		$rev_block='';
 		$val_block='';
-		$order_block='<p><label class="w3-text-grey"><b>Заказ SD: </label><div class="sd_order">'.$order_id.'</div></b></p>';
+		$order_block='<p><label class="w3-text-grey"><b>Заказ SD: <div class="sd_order">'.$order_id.'</div></b></label></p>';
 		$enter_button='';
 		$header='';
-		$val_block=number_format($inv_val).$cur_txt;
 		if($done_flag)
 		{
+			
+			$val_block.=number_format($inv_val).$cur_txt;
+			
 			$header='данные документа';
 			$hr_block='<hr style="width:50px;border:5px solid green" class="w3-round">';
 		}
 		else
 		{
-			
+			$enter_button='<button type="button" id="send" class="w3-btn w3-white w3-padding-large w3-margin w3-hover-grey w3-border w3-border-red" value="">ВВОД</button>';
 			$header='регистрация';
 			$hr_block='<hr style="width:50px;border:5px solid red" class="w3-round">';
-		}
-					
-		$input_block='<input hidden type="text" id="out_value" value="'.$inv_val.'"  />';
-		$enter_button='<button type="button" id="send" class="w3-btn w3-white w3-padding-large w3-margin w3-hover-grey w3-border w3-border-red" value="">ВВОД</button>';
-
+		}			
 	$content='
 			<!-- !PAGE CONTENT! -->
 			<div class="w3-main" style="margin-left:340px;margin-right:40px">
@@ -113,18 +111,20 @@ echo '<script src="/re/js/re_input.js"></script>';
 					<div class="r_e">
 						<form id="form" class="re_form" action="book_invoice.php">';
 		
-		$content.='<p><label class="w3-text-grey"><b>Клиент: </label>'.$client.'</b></p>
-						<p><label class="w3-text-grey"><b>Контракт: </label>'.$c_num.'</b></p>
-						<p><label class="w3-text-grey"><b>Период: </label>'.$period.'</b></p>';
-		$content.=$order_block;
-		$content.='<p><label class="w3-text-grey"><b>СУММА:<div id="inv_val">'.$val_block.'</div></b></p>
+		$content.='
+						<p><label class="w3-text-grey"><b>Клиент: '.$client.'</b></label></p>
+						<p><label class="w3-text-grey"><b>Контракт: '.$c_num.'</b></label></p>
+						<p><label class="w3-text-grey"><b>Период: '.$period.'</b></label></p>
+						'.$order_block.'
+						<p><label class="w3-text-grey"><b>СУММА:<div id="inv_val">'.$val_block.'</div></b></label></p>
 						<p>
 							<div id="errors" class="w3-red w3-border-red"></div><div id="returned" class="w3-grey w3-border-grey"></div>
-							<input hidden type="text" id="min" value="">
-							<input hidden type="text" id="pct" value="">
+							<input hidden type="text" id="min" value="'.$min.'">
+							<input hidden type="text" id="pct" value="'.$pct.'">
 							<input hidden type="text" id="type" value="'.$type.'">
 							<input hidden type="text" id="currency" value="'.$cur_txt.'">
-							<input hidden type="text" id="invoice_id" value="'.$id.'">'.$input_block.$enter_button.'
+							<input hidden type="text" id="out_value" value="'.$inv_val.'">
+							<input hidden type="text" id="invoice_id" value="'.$id.'">'.$enter_button.'
 							<button type="button" id="back" class="w3-btn w3-white w3-padding-large w3-margin w3-hover-grey w3-border w3-border-black" value="">НАЗАД</button>
 						</p>';
 				
