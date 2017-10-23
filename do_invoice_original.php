@@ -93,7 +93,7 @@ echo '<script src="/re/js/re_input.js"></script>';
 		else $min_total=$min;
 		$rev_block='';
 		$val_block='';
-		$order_block='<p><label class="w3-text-grey"><b>Заказ SD: </label><div class="sd_order">'.$order_id.'</div></b></p>';
+		$order_block='<p><label class="w3-text-grey"><b>Заказ SD: </label><div id="sd_order">'.$order_id.'</div></b></p>';
 		$enter_button='';
 		$header='';
 		if($done_flag)
@@ -108,7 +108,7 @@ echo '<script src="/re/js/re_input.js"></script>';
 		{
 			$rev_block='<input type="text" class="display w3-margin" id="input_row" value="" placeholder="1 000 000" />
 						<button type="button" class="re_button w3-btn w3-margin w3-white w3-round-small w3-tiny w3-border w3-border-grey w3-hover-yellow" >РАСЧЕТ</button>';
-			$enter_button='<button type="button" id="send" class="w3-btn w3-white w3-padding-large w3-margin w3-hover-grey w3-border w3-border-red" value="">ВВОД</button>';
+			$enter_button='<button type="button" id="send_b" class="w3-btn w3-white w3-padding-large w3-margin w3-hover-grey w3-border w3-border-red" value="">ВВОД</button>';
 			$header='регистрация';
 			$hr_block='<hr style="width:50px;border:5px solid red" class="w3-round">';
 		}			

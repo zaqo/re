@@ -226,15 +226,34 @@ echo '<script src="/re/js/re_input.js"></script>';
 						<div class="w3-container hid_form" id="new_invoice" style="display:none">
 							<h1 class="w3-xxxlarge w3-text-red"><b>новый счет.</b></h1>
 							<hr style="width:50px;border:5px solid red" class="w3-round">
-							<p>заполните данные формы</p>
+							
 							<form action="/re/create_invoice.php" target="_blank">
 								<div class="w3-section">
 									<label><b>Месяц:</b></label>
-									<input class="w3-input w3-border" type="text" name="month" required>
+									<select class="w3-input w3-border" name="month" required>
+										<option value=""></option>
+										<option value="1">Январь</option>
+										<option value="2">Февраль</option>
+										<option value="3">Март</option>
+										<option value="4">Апрель</option>
+										<option value="5">Май</option>
+										<option value="6">Июнь</option>
+										<option value="7">Июль</option>
+										<option value="8">Август</option>
+										<option value="9">Сентябрь</option>
+										<option value="10">Октябрь</option>
+										<option value="11">Ноябрь</option>
+										<option value="12">Декабрь</option>
+									</select>
 								</div>
 								<div class="w3-section">
 									<label><b>Год:</b></label>
-									<input class="w3-input w3-border" type="text" name="year" required>
+									<select class="w3-input w3-border" name="year" required>
+										<option value=""></option>
+										<option value="17">2017</option>
+										<option value="18">2018</option>
+										<option value="19">2019</option>
+									</select>
 								</div>
 								<div class="w3-section">
 									<label><b>Цена:</b></label>

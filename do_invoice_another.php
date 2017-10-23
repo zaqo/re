@@ -34,7 +34,7 @@ include ("header_tpl.php");
 				else 
 					echo "DATABASE ERROR: INVOICE not found!";
 				//var_dump($cData);
-				$inv_val=$num[0];
+				$inv_val=number_format($num[0]);
 				$inv_date=$num[1];
 				$min=$num[2];
 				$inv_min_pub=number_format($num[2]);
@@ -75,20 +75,18 @@ include ("header_tpl.php");
 				}
 		$rev_block='';
 		$val_block='';
-		$order_block='<p><label class="w3-text-grey"><b>Заказ SD: <div class="sd_order">'.$order_id.'</div></b></label></p>';
+		$order_block='<p><label class="w3-text-grey"><b>Заказ SD: <div id="sd_order">'.$order_id.'</div></b></label></p>';
 		$enter_button='';
 		$header='';
+		$val_block.=$inv_val.$cur_txt;
 		if($done_flag)
 		{
-			
-			$val_block.=number_format($inv_val).$cur_txt;
-			
 			$header='данные документа';
 			$hr_block='<hr style="width:50px;border:5px solid green" class="w3-round">';
 		}
 		else
 		{
-			$enter_button='<button type="button" id="send" class="w3-btn w3-white w3-padding-large w3-margin w3-hover-grey w3-border w3-border-red" value="">ВВОД</button>';
+			$enter_button='<button type="button" id="send_a" class="w3-btn w3-white w3-padding-large w3-margin w3-hover-grey w3-border w3-border-red" value="">ВВОД</button>';
 			$header='регистрация';
 			$hr_block='<hr style="width:50px;border:5px solid red" class="w3-round">';
 		}			

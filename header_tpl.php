@@ -5,7 +5,7 @@
 		<head>
 			<script src="/re/js/OSC.js"></script>
 			<script src="/re/js/menu.js"></script>
-			<script src="/re/js/re_input.js"></script>
+			<script src="/re/js/re_input.js" defer></script>
 			<script src="/re/js/form_submit.js"></script>
 			<meta http-equiv="Content-Type" content="text/html; charset=utf8" />
 		

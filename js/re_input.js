@@ -16,7 +16,8 @@ window.onload = function () {
 	var in_pay = in_.find('#pay');
 	// get button
 	var in_button = in_.find('.re_button');
-	var out_button = in_.find('#send');
+	var out_button = in_.find('#send_a');// For the contract with fixed payment
+	var out_button_rev = in_.find('#send_b');// For the form with revenue
 	var back_button = in_.find('#back');
     //вешаем на него событие
     in_button.on('click',function(){
@@ -35,7 +36,7 @@ window.onload = function () {
 		revenue=parseFloat(revenue);
 		min_total=parseFloat(min_total);
 		var rev_total=(rev_limit+revenue)*pct;
-		//alert(rev_total);
+		//alert("type"+type);
 		switch(type){
 			case '1':
 				result=pct*revenue;
@@ -74,11 +75,44 @@ window.onload = function () {
 			var y = document.getElementsByTagName("button")[1];
 			
 				x.style.display = "none";
-				//y.style.display = "none";
+				
+			if (data){
+				$('#sd_order').append('<span class="w3-opacity"><h2>'+data.toString()+'</h2></span>');
+			}
+			else
+				$('#errors').html('<span class="w3-opacity"><h2> Ошибка при передаче в SAP ERP: '+data.toString()+'</h2></span>');
+			
+		}).fail(function( data ) {    
+					var response = data.responseText;
+					var parser = new DOMParser();
+					//var errors=document.getElementById("#errors");
+					xmlDoc = parser.parseFromString(response,"text/xml");
+					//
+					var resp_1=xmlDoc.getElementsByTagName("title")[0].childNodes[0].nodeValue;
+					var resp_2=xmlDoc.getElementsByTagName("h2")[0].childNodes[0].nodeValue;
+					//var title=$(response).find("title");
+					$('#errors').html(' <p><b>'+resp_1+': '+resp_2+'</b></p>');
+				});
+	});
+	out_button_rev.on('click', function(){
+		var rev=$('.r_e').find('.display').val();
+		var res=$('.r_e').find('#out_value').val();
+		var inv_id=$('.r_e').find('#invoice_id').val();
+		
+		
+		$.post( "book_invoice.php", { id: inv_id, invoice: res, revenue: rev })
+		  .done(function( data ) {
+			
+			
+			var x = document.getElementsByTagName("button")[0];
+			var y = document.getElementsByTagName("button")[1];
+			
+				x.style.display = "none";
+				y.style.display = "none";
 				document.getElementById("input_row").disabled = true;
 				
 			if (data){
-				$('.sd_order').html('<span class="w3-opacity"><h2>'+data.toString()+'</h2></span>');
+				$('#sd_order').append('<span class="w3-opacity"><h2>'+data.toString()+'</h2></span>');
 			}
 			else
 				$('#errors').html('<span class="w3-opacity"><h2> Ошибка при передаче в SAP ERP: '+data.toString()+'</h2></span>');
