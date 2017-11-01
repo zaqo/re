@@ -37,11 +37,11 @@ function SAP_connector($params)
 	} 
 	
 	//обработчик ответа
-	/*
-	echo '<pre>';
-		var_dump($result);
-	echo '</pre>';
-	*/
+	
+	//echo '<pre>';
+	//	var_dump($result);
+	//echo '</pre>';
+	
 	// I DECIDED TO KEEP IT OUTSIDE
 	//$order=SAP_response_handler($result); 
 	//$output=$result->RETURN2->item->MESSAGE_V4;
@@ -111,8 +111,13 @@ function SAP_response_handler($response)
 
 function SAP_set_order($rec_id)
 {
-//return ID of SD order
-//OR 0 - if failed
+/*
+	This FUNCTION posts SD order 
+	INPUT: id of invoice
+	OUTPUT:
+			- "ID" of SD order
+			OR "0" - if failed
+*/
 	include("login_re.php");
 	ini_set("soap.wsdl_cache_enabled", "0");
 	
@@ -359,4 +364,125 @@ function SAP_get_contract($rec_id)
 				$doc=$response->SD_DOC_LIST;
 	return $doc;
 }			//END OF SAP_get_contract
+
+//MULTY POSITION INVOICE SETTER
+function SAP_set_order_multy($rec_id)
+{
+/*
+	This FUNCTION posts SD order 
+	INPUT: id of invoice
+	OUTPUT:
+			- "ID" of SD order
+			OR "0" - if failed
+*/
+	include("login_re.php");
+	ini_set("soap.wsdl_cache_enabled", "0");
+	
+	//THESE PARAMS ARE FIXED NOW
+	$cond_type='ZPR0';	
+	
+	$service_mode='SO_C';	// CREATE	
+	$req = new Request();
+	 
+			//Setting up the object
+			$item= new Item();
+		
+		//Set up mySQL connection
+			$db_server = mysqli_connect($db_hostname, $db_username,$db_password);
+			$db_server->set_charset("utf8");
+			If (!$db_server) die("Can not connect to a database!!".mysqli_connect_error($db_server));
+			mysqli_select_db($db_server,$db_database)or die(mysqli_error($db_server));
+	//1.	
+		//  LOCATE data for the invoice
+			$invoice_sql="SELECT invoice.date,invoice.value,contract.id_SAP,currency.code 
+							FROM  invoice 
+							LEFT JOIN contract ON invoice.contract_id=contract.id 
+                            LEFT JOIN currency ON invoice.currency=currency.id
+							WHERE invoice.id=$rec_id";
+				
+			$answsql=mysqli_query($db_server,$invoice_sql);
+				
+			if(!$answsql) die("Database SELECT TO invoice table failed: ".mysqli_error($db_server));	
+			if (!$answsql->num_rows)
+			{
+				echo "WARNING: No invoice found for a given ID in invoice TABLE <br/>";
+				return 0;
+			}	
+			$i_data= mysqli_fetch_row($answsql);
+				
+			
+	//2.	
+			// Prepare request for SAP ERPclass Item
+	
+			// Set up params
+			
+			$c_date=$i_data[0];
+			$val=$i_data[1];
+			$contract_id=$i_data[2];
+			$curr=$i_data[3];	// Currency in invoice
+			
+			// Preparing Items for Invoice
+			
+			//  LOCATE POSITIONS for the invoice
+			$positions_sql="SELECT service_id,quantity,service.id_SAP 
+							FROM  invoice_reg 
+							LEFT JOIN service ON invoice_reg.service_id=service.id
+							WHERE invoice_id=$rec_id";
+				
+			$answsql1=mysqli_query($db_server,$positions_sql);
+				
+			if(!$answsql1) die("Database SELECT TO invoice_reg table failed: ".mysqli_error($db_server));	
+			$count_in=$answsql1->num_rows;
+			if (!$count_in)
+			{
+				echo "WARNING: No POSITIONS found for a given ID in invoice_reg TABLE <br/>";
+				return 0;
+			}	
+			while($pos_data= mysqli_fetch_row($answsql1))
+			{
+				// only one position by Invoice now
+				$items=new ItemList();
+				for($it=0;$it<$count_in;$it++)
+				{	
+					$item1 = new Item();
+					// 1. Item number
+					$item_num=($it+1).'0';
+					$item1->ITM_NUMBER=$item_num;
+			
+					// 2. Material code
+					$item1->MATERIAL=$pos_data[2];
+			
+				
+				// 3. Currency ?? - need it?
+					$item1->CURRENCY=$curr;
+				
+					// 4. SD conditions
+					$item1->COND_TYPE=$cond_type;
+					$item1->COND_VALUE=$val;
+				
+					// 4. Quantity
+					$item1->TARGET_QTY=$pos_data[1];; 
+				
+			
+					//Inserting into Item List
+			
+					$items->item[$it] = $item1;
+				}
+			}
+		// GENERAL SECTION (HEADER)
+		
+			$req->ID_SALESCONTRACT = $contract_id;	
+			$req->SERVICEMODE = $service_mode; 		
+			$req->BILLDATE=$c_date;
+			$req->SALES_ITEMS_IN=$items;
+			$req->RETURN2 = '';
+			
+			$order=SAP_connector($req);
+			if ($order)
+				$doc_id=$order->RETURN2->item->MESSAGE_V4;
+	mysqli_close($db_server);
+	return $doc_id;
+}			//END OF SAP_export_invoice
+
+
 ?>

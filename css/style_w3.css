@@ -42,11 +42,11 @@ table.myContract {
 	width: 100%;
 }
  .col_1 { width: 15px; }
-   .col_2 { width: 40px; }
-   .col_3 { width: 40px; }
+   .col_2 { width: 20px; }
+   .col_3 { width: 30px; }
    .col_4 { width: 40px; }
-   .col_5 { width: 40px; }
-   .col_6 { width: 30px; }
+   .col_5 { width: 50px; }
+   .col_6 { width: 60px; }
    .col_7 { width: 100px; }
    
 table.fullTab {
@@ -308,4 +308,28 @@ caption:before, caption:after {
 }
 .tablink {
     font: 700 12px/1 Helvetica, sans-serif;
+}
+ /* BELOW FOR LIVE SEARCH*/
+  .search_result{
+    background: #FFF;
+    border: 1px #ccc solid;
+    width: 100px;
+    border-radius: 4px;
+    max-height:100px;
+    overflow-y:scroll;
+    display:none;
+}
+
+.search_result li{
+    list-style: none;
+    padding: 5px 10px;
+    margin: 0 0 0 -40px;
+    color: #0896D3;
+    border-bottom: 1px #ccc solid;
+    cursor: pointer;
+    transition:0.3s;
+}
+
+.search_result li:hover{
+    background: #F9FF00;
 }
