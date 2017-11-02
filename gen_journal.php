@@ -56,7 +56,7 @@ include_once("header_tpl_doc.php");
 				$client=$cData[2];
 				$service=$cData[3];
 				$qty=$cData[4];
-				$sd_order=$cData[5];
+				$sd_order=(int)$cData[5];
 				$date=$cData[6];
 				$tab_row='';
 				$date_show=substr($date,8,2)."-".substr($date, 5,2)."-".substr($date, 2,2);
