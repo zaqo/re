@@ -42,7 +42,7 @@ include ("header_tpl_doc.php");
 					{
 						$svs_sel.='<option value="'.$svs_in[0].'">'.$svs_in[1].' | </option>';
 					}
-				$svs_sel='<select class="w3-input w3-border" id="services" name="svs[]" ><option value="" selected disabled> --- выберите --- </option>'.$svs_sel.'</select>';
+				$svs_sel='<select class="w3-input w3-border" id="services" name="svs[]" required><option value="" selected disabled> --- выберите --- </option>'.$svs_sel.'</select>';
 				
 				
 				$year_sel='<select class=" w3-select w3-border id="year_sel" name="year" required>
@@ -112,7 +112,7 @@ include ("header_tpl_doc.php");
 								</div>
 								<div class="w3-container w3-cell w3-quarter">
 									<label class="w3-text-grey">Количество</label>
-									<input type="number" name="qty[]"  class="w3-input digi" style="text-align:center; width:80%;" min="1" placeholder="1">
+									<input type="number" name="qty[]"  class="w3-input digi" style="text-align:center; width:80%;" min="1" placeholder="1" required>
 								</div>
 								<div class="w3-container w3-cell w3-quarter">
 									<button class="w3-button w3-circle w3-teal" style="margin-top:23px" onclick="addSection()">+</button>
