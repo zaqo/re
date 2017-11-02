@@ -31,6 +31,7 @@
 			public $ID_SALESORDER_RUD;//char 10
 			public $SALES_ITEMS_IN;
 			public $SERVICEMODE; //char4
+			public $SERVICEDATE; //date10
 			public $RETURN2;
 			public $BAPIRET2;
 	}
@@ -79,12 +80,12 @@
 				// 1.BOOK INVOICE
 				$invoice_set='INSERT INTO invoice(month,year,date,currency,value,isValid,contract_id)
 										VALUES ("'.$month.'","'.$year.'",CURDATE(),"'.$inv_cur.'","0",1,"'.$id.'")';
-				$echo=$invoice_set;
+				//$echo=$invoice_set;
 						$answsql=mysqli_query($db_server,$invoice_set);
 						
 						if(!$answsql) die("Database INSERT invoice TABLE failed: ".mysqli_error($db_server));
 						$ins_invoice_ref=$db_server->insert_id;
-				echo $ins_invoice_ref.'<br/>';
+				//echo $ins_invoice_ref.'<br/>';
 				// 2. BOOK POSITIONS: services and quantity
 					$srv_id='';
 					$qty=0;
@@ -94,7 +95,7 @@
 						$qty=$quantity[$key];
 						$invoice_reg_set='INSERT INTO invoice_reg(invoice_id,service_id,quantity,isValid)
 										VALUES ("'.$ins_invoice_ref.'","'.$srv_id.'","'.$qty.'",1)';
-						echo $invoice_reg_set;
+						//echo $invoice_reg_set;
 						$answsql=mysqli_query($db_server,$invoice_reg_set);
 						
 						if(!$answsql) die("Database INSERT to invoice_reg TABLE  failed: ".mysqli_error($db_server));
@@ -102,52 +103,22 @@
 				
 				// 4. SEND TO SAP, get the SD order
 				//   
-				/*
-				$res=SAP_set_order($id);
+			
+				$res=SAP_set_order_multy($ins_invoice_ref);
 				if($res) // UPDATE INVOICE
 				{
-					$invoice_set='UPDATE invoice SET id_SD="'.$res.'"  WHERE id='.$id;
+					$invoice_set='UPDATE invoice SET id_SD="'.$res.'"  WHERE id='.$ins_invoice_ref;
 				
 						$answsql=mysqli_query($db_server,$invoice_set);
 						
 						if(!$answsql) die("Database invoice update failed: ".mysqli_error($db_server));
 				}
 				
-				// 5. Book in the contract ledger - NOW ITS DEFUNCT
-					
-/*				
-				//a. Get the current status of result
-					
-					$queryresult = 'SELECT result FROM contract_ledger 
-										WHERE contract_id ='.$contractid.'
-										AND doc_type=1';
-										
-					$answsql=mysqli_query($db_server,$queryresult);
-					//$num=mysqli_num_rows($answsql);
-					$checkRes=0;
-					if($num==0)
-						$noRecs=1; 
-					else
-					{
-						//for($i=0;$i<$num;$i++)
-						 //$checkRes=mysqli_fetch_row($answsql);
-						//var_dump($checkRes);// checking if we have found a contract
-						
-					}
-					//echo "Current value of contract is: ".$checkRes[0]." number of records = ".$num."/n";
-					
-					//b. Book in the ledger 
-					$result=$checkRes[0]+$facevalue;
-					$ledgersql='INSERT INTO contract_ledger(contract_id,doc_id,doc_type,date,value,decade,month,year,result)
-						VALUES ("'.$contractid.'","'.$ins_invoice_ref.'",1,CURDATE(),"'.$facevalue.'","'.$date_d.'","'.$date_m.'","'.$date_y.'","'.$result.'")';
-					//$answsql=mysqli_query($db_server,$ledgersql);
-						//var_dump($answsql);
-						if(!$answsql) die("Database invoice ledger booking failed: ".mysqli_error($db_server));
-	*/
-					//echo $res;
-					mysqli_close($db_server);
 				
-				//echo '<script>history.go(-3);</script>';
+					
+	mysqli_close($db_server);
+				
+				//echo '<script>history.go(-2);</script>';
 				
 ?>
 		

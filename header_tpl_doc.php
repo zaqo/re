@@ -116,7 +116,8 @@ body {font-size:16px;}
   <div class="w3-bar-block">
     <a href="/re/med_form_avia.php" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Авиакомпании</a> 
     <a href="/re/invoice_form.php" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Прочие клиенты</a> 
-	  <a href="/re/med_journal.php" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Журнал</a> 
+	  <a href="/re/med_journal.php" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Журнал | avia</a>
+	  <a href="/re/gen_journal.php" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Журнал | счета</a> 
     
   </div>
 </nav>

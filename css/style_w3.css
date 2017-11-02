@@ -41,7 +41,7 @@ table.myContract {
 	table-layout:fixed;
 	width: 100%;
 }
- .col_1 { width: 15px; }
+ .col_1 { width: 10px; }
    .col_2 { width: 20px; }
    .col_3 { width: 30px; }
    .col_4 { width: 40px; }

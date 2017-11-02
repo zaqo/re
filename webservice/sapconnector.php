@@ -38,17 +38,17 @@ function SAP_connector($params)
 	
 	//обработчик ответа
 	
-	//echo '<pre>';
-	//	var_dump($result);
-	//echo '</pre>';
+	echo '<pre>';
+		var_dump($result);
+	echo '</pre>';
 	
 	// I DECIDED TO KEEP IT OUTSIDE
 	//$order=SAP_response_handler($result); 
 	//$output=$result->RETURN2->item->MESSAGE_V4;
 	
 	// Вывод запроса и ответа
-	//echo "Запрос:<pre>".htmlspecialchars($client->__getLastRequest()) ."</pre>";
-	//echo "Ответ:<pre>".htmlspecialchars($client->__getLastResponse())."</pre>";
+	echo "Запрос:<pre>".htmlspecialchars($client->__getLastRequest()) ."</pre>";
+	echo "Ответ:<pre>".htmlspecialchars($client->__getLastResponse())."</pre>";
 	
 	// Вывод отладочной информации в случае возникновения ошибки
 	if (is_soap_fault($result)) 
@@ -360,8 +360,11 @@ function SAP_get_contract($rec_id)
 			$req->RETURN2 = '';
 			$req->SD_DOC_LIST = '';
 			$response=SAP_connector($req);
+			echo "<pre>";
 			if($response) 
-				$doc=$response->SD_DOC_LIST;
+				var_dump($response);	
+			//$doc=$response->SD_DOC_LIST;
+			echo "</pre>";
 	return $doc;
 }			//END OF SAP_get_contract
 
@@ -377,7 +380,7 @@ function SAP_set_order_multy($rec_id)
 */
 	include("login_re.php");
 	ini_set("soap.wsdl_cache_enabled", "0");
-	
+
 	//THESE PARAMS ARE FIXED NOW
 	$cond_type='ZPR0';	
 	
@@ -394,7 +397,7 @@ function SAP_set_order_multy($rec_id)
 			mysqli_select_db($db_server,$db_database)or die(mysqli_error($db_server));
 	//1.	
 		//  LOCATE data for the invoice
-			$invoice_sql="SELECT invoice.date,invoice.value,contract.id_SAP,currency.code 
+			$invoice_sql="SELECT invoice.date,invoice.value,contract.id_SAP,currency.code,invoice.month,invoice.year 
 							FROM  invoice 
 							LEFT JOIN contract ON invoice.contract_id=contract.id 
                             LEFT JOIN currency ON invoice.currency=currency.id
@@ -420,6 +423,52 @@ function SAP_set_order_multy($rec_id)
 			$val=$i_data[1];
 			$contract_id=$i_data[2];
 			$curr=$i_data[3];	// Currency in invoice
+			$c_month=$i_data[4];
+			$c_year=$i_data[5];
+			$srv_date='';
+			$m_date='';
+			//SET UP SERVICE DATE - END OF THE BILLING PERIOD
+			switch($c_month)
+			{
+				case '1':
+				$m_date='-01-31';
+				break;
+				case '2':
+				$m_date='-02-28';
+				break;
+				case '3':
+				$m_date='-03-31';
+				break;
+				case '4':
+				$m_date='-04-30';
+				break;
+				case '5':
+				$m_date='-05-31';
+				break;
+				case '6':
+				$m_date='-06-30';
+				break;
+				case '7':
+				$m_date='-07-31';
+				break;
+				case '8':
+				$m_date='-08-31';
+				break;
+				case '9':
+				$m_date='-09-30';
+				break;
+				case '10':
+				$m_date='-10-31';
+				break;
+				case '11':
+				$m_date='-11-30';
+				break;
+				case '12':
+				$m_date='-12-31';
+				break;
+			}
+			
+			$srv_date='20'.$c_year.$m_date;
 			
 			// Preparing Items for Invoice
 			
@@ -438,12 +487,11 @@ function SAP_set_order_multy($rec_id)
 				echo "WARNING: No POSITIONS found for a given ID in invoice_reg TABLE <br/>";
 				return 0;
 			}	
-			while($pos_data= mysqli_fetch_row($answsql1))
-			{
-				// only one position by Invoice now
+				
 				$items=new ItemList();
 				for($it=0;$it<$count_in;$it++)
 				{	
+					$pos_data= mysqli_fetch_row($answsql1);
 					$item1 = new Item();
 					// 1. Item number
 					$item_num=($it+1).'0';
@@ -468,18 +516,22 @@ function SAP_set_order_multy($rec_id)
 			
 					$items->item[$it] = $item1;
 				}
-			}
+			
 		// GENERAL SECTION (HEADER)
 		
 			$req->ID_SALESCONTRACT = $contract_id;	
 			$req->SERVICEMODE = $service_mode; 		
 			$req->BILLDATE=$c_date;
 			$req->SALES_ITEMS_IN=$items;
+			$req->SERVICEDATE=$srv_date;
 			$req->RETURN2 = '';
-			
+			//echo "SENDING TO SAP";
 			$order=SAP_connector($req);
-			if ($order)
+			if ($order->RETURN2->item->MESSAGE=="SUCCESS")
 				$doc_id=$order->RETURN2->item->MESSAGE_V4;
+			else
+				$doc_id=0;
+			
 	mysqli_close($db_server);
 	return $doc_id;
 }			//END OF SAP_export_invoice
