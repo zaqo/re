@@ -118,7 +118,7 @@
 					
 	mysqli_close($db_server);
 				
-				//echo '<script>history.go(-2);</script>';
+				echo '<script>history.go(-1);</script>';
 				
 ?>
 		

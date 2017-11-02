@@ -38,17 +38,17 @@ function SAP_connector($params)
 	
 	//обработчик ответа
 	
-	echo '<pre>';
-		var_dump($result);
-	echo '</pre>';
+	//echo '<pre>';
+	//	var_dump($result);
+	//echo '</pre>';
 	
 	// I DECIDED TO KEEP IT OUTSIDE
 	//$order=SAP_response_handler($result); 
 	//$output=$result->RETURN2->item->MESSAGE_V4;
 	
 	// Вывод запроса и ответа
-	echo "Запрос:<pre>".htmlspecialchars($client->__getLastRequest()) ."</pre>";
-	echo "Ответ:<pre>".htmlspecialchars($client->__getLastResponse())."</pre>";
+	//echo "Запрос:<pre>".htmlspecialchars($client->__getLastRequest()) ."</pre>";
+	//echo "Ответ:<pre>".htmlspecialchars($client->__getLastResponse())."</pre>";
 	
 	// Вывод отладочной информации в случае возникновения ошибки
 	if (is_soap_fault($result)) 
