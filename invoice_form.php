@@ -42,7 +42,7 @@ include ("header_tpl_doc.php");
 					{
 						$svs_sel.='<option value="'.$svs_in[0].'">'.$svs_in[1].' | </option>';
 					}
-				$svs_sel='<select class="w3-input w3-border" id="services" name="svs[]" required><option value="" selected disabled> --- выберите --- </option>'.$svs_sel.'</select>';
+				$svs_sel='<select class="w3-input w3-border services" id="" name="svs[]" required><option value="" selected disabled> --- выберите --- </option>'.$svs_sel.'</select>';
 				
 				
 				$year_sel='<select class=" w3-select w3-border id="year_sel" name="year" required>
@@ -103,7 +103,8 @@ include ("header_tpl_doc.php");
 							<!--ITEMS SECTION -->
 							
 							 <p><label class="w3-text-grey itm_label"><b>Услуги: </b></label></p>
-							 <table class="w3-table itm_s">
+							 <table class="w3-table w3-striped itm_s">
+							 <tbody>
 							 <tr><td>
 							 <div class="w3-cell-row itm_pop">
 								<div class="w3-container w3-cell w3-half">
@@ -115,9 +116,9 @@ include ("header_tpl_doc.php");
 									<input type="number" name="qty[]"  class="w3-input digi" style="text-align:center; width:80%;" min="1" placeholder="1" required>
 								</div>
 								<div class="w3-container w3-cell w3-quarter">
-									<button class="w3-button w3-circle w3-teal" style="margin-top:23px" onclick="addSection()">+</button>
+									<button class="w3-button w3-circle w3-teal" style="margin-top:23px" onclick="addSecNew(1)">+</button>
 								</div>
-							 </div>
+							 </div></td></tr></tbody>
 							</table>							
 							<p>
 								<div id="errors" class="w3-red w3-border-red"></div>

@@ -119,6 +119,20 @@ function addSection () {
 			//tbody.appendChild(row)
 			$(".itm_s").append('<tr><td>'+content+'</td></tr>');
 		}
-	function removeSection () {
-			$(".itm_s").find('td.add:last').remove();//IT DOESNT WORK :(
+function addSecNew (i) {
+			//var telnum = parseInt($("#add_field_area").find("div.add:last").attr("id").slice(3))+1;//увеличиваем значение счетчика
+		
+			 var content=$(".services").html();//grasp the section
+			content='<select class="w3-input w3-border services" id="" name="svs[]" required>'+content+'</select>';
+			//alert(content);
+			//and draw a new row
+			var first="<div class='w3-cell-row itm_pop'><div class='w3-container w3-cell w3-half'><label class='w3-text-grey'>Название</label>";
+			var del_button="<button class='w3-button w3-circle w3-red' style='margin-top:23px' onclick='removeSection("+i+")'>-</button>";
+			var second="</div><div class='w3-container w3-cell w3-quarter'><label class='w3-text-grey'>Количество</label><input type='number' name='qty[]'  class='w3-input digi' style='text-align:center; width:80%;' min='1' placeholder='1' required></div><div class='w3-container w3-cell w3-quarter'><button class='w3-button w3-circle w3-teal' style='margin-top:23px' onclick='addSecNew("+(i+1)+")'>+</button>"+del_button+"</div></div>";
+			//tbody.appendChild(row)
+			$(".itm_s >tbody:last-child").append('<div id="'+i+'"><tr><td>'+first+content+second+'</td></tr></div>');
+		}
+	function removeSection (i) {
+			$(".itm_s").find('#'+i).remove();//IT WORKS! :
+			//$(".itm_s").find("tbody:last-child").remove();
 		}
