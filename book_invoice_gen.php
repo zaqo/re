@@ -70,7 +70,7 @@
 				$inv_cur=1; // NOW IT'S FIXED
 				$datetime = new DateTime();
 				$datestr = $datetime->format('d-m-Y');
-				var_dump($_REQUEST);
+				//var_dump($_REQUEST);
 	
 					$db_server = mysqli_connect($db_hostname, $db_username,$db_password);
 					$db_server->set_charset("utf8");

@@ -137,7 +137,7 @@ function SAP_set_order($rec_id)
 			mysqli_select_db($db_server,$db_database)or die(mysqli_error($db_server));
 	//1.	
 		//  LOCATE data for the invoice
-			$invoice_sql="SELECT invoice.date,invoice.value,contract.id_SAP,currency.code 
+			$invoice_sql="SELECT invoice.date,invoice.value,contract.id_SAP,currency.code,decade,month,year 
 							FROM  invoice 
 							LEFT JOIN contract ON invoice.contract_id=contract.id 
                             LEFT JOIN currency ON invoice.currency=currency.id
@@ -163,7 +163,87 @@ function SAP_set_order($rec_id)
 			$val=$i_data[1];
 			$contract_id=$i_data[2];
 			$curr=$i_data[3];	// Currency in invoice
-			
+			$decade=$i_data[4];
+			$month=$i_data[5];
+			$year=$i_data[6];
+			//SERVICE DATE
+			$service_date='';
+			switch($month)
+			{
+				case 1:
+					$service_date='-01-';
+					$day='31';
+					break;
+				case 2:
+					$service_date='-02-';
+					if((int)$year%4)
+						$day='28';
+					else
+						$day='29';
+					break;
+				case 3:
+					$service_date='-03-';
+					$day='31';
+					break;
+				case 4:
+					$service_date='-04-';
+					$day='30';
+					break;
+				case 5:
+					$service_date='-05-';
+					$day='31';
+					break;
+				case 6:
+					$service_date='-06-';
+					$day='30';
+					break;
+				case 7:
+					$service_date='-07-';
+					$day='31';
+					break;
+				case 8:
+					$service_date='-08-';
+					$day='31';
+					break;
+				case 9:
+					$service_date='-09-';
+					$day='30';
+					break;
+				case 10:
+					$service_date='-10-';
+					$day='31';
+					break;
+				case 11:
+					$service_date='-11-';
+					$day='30';
+					break;
+				case 12:
+					$service_date='-12-';
+					$day='31';
+					break;
+				default:
+					echo 'WARNING _ WRONG MONTH IN THE INPUT DATA! <br/>';
+					break;
+			}
+			switch($decade)
+			{
+				case 0:
+					$day='01';
+					break;
+				case 1:
+					$day='10';
+					break;
+				case 2:
+					$day='20';
+					break;
+				case 1:
+					$day='28';
+					break;
+				default:
+					echo 'WARNING _ WRONG DECADE IN THE INPUT DATA! <br/>';
+					break;
+			}
+			$service_date='20'.$year.$service_date.$day;
 			// Preparing Items for Invoice
 			$count_in=1;// only one position by Invoice now
 			$items=new ItemList();
@@ -204,7 +284,8 @@ function SAP_set_order($rec_id)
 		// GENERAL SECTION (HEADER)
 		
 			$req->ID_SALESCONTRACT = $contract_id;	
-			$req->SERVICEMODE = $service_mode; 		
+			$req->SERVICEMODE = $service_mode;
+			$req->SERVICEDATE = $service_date;			
 			$req->BILLDATE=$c_date;
 			$req->SALES_ITEMS_IN=$items;
 			$req->RETURN2 = '';

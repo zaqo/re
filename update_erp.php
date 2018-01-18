@@ -29,7 +29,7 @@ include ("header.php");
 	class Request
 	{
 			public $BILLDATE;
-			public $COND_VALUE;//decimal 19.4
+			public $SERVICEDATE;
 			public $CURRENCY;
 			public $ID_SALESCONTRACT;//char 10
 			public $ID_SALESORDER_RUD;//char 10
